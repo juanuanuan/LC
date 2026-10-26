@@ -33,7 +33,7 @@
     },
     {
       "id": "MJUe",
-      "code_hash": "97006f9b98d36f742c20c960d513698a",
+      "code_hash": "f50912d04baeabd3aada25a5f54c2a5a",
       "outputs": [
         {
           "type": "data",
@@ -42,7 +42,14 @@
           }
         }
       ],
-      "console": []
+      "console": [
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "0 False\n1 True\n2 True\n3 True\n4 True\n5 True\n6 True\n7 False\nunsat\n",
+          "mimetype": "text/plain"
+        }
+      ]
     }
   ]
 }

@@ -52,11 +52,28 @@ def _():
     from z3 import(
         BitVec, BitVecs, BitVecVal, Const, EnumSort, Solver,
         And, Or, Not, If, simplify, sat, unsat,
-        ULT, ULE, UGT, UGE, UDiv, LShR,
+        ULT, ULE, UGT, UGE, UDiv, LShR, substitute
     )
 
-    x = BitVec('a', 16)
-    y = BitVec('b', 16)
+
+    _init = BitVecVal(1,3)
+    _skip = BitVecVal(2,3)
+    _left = BitVecVal(3,3)
+    _right = BitVecVal(4,3)
+    _stop = BitVecVal(5,3)
+    _error = BitVecVal(6,3)
+
+    pc = BitVec('pc', 3)
+
+    dom_pc = And(ULE(1,pc), UGE(6,pc))
+
+    for k in range(8):
+        print(k, simplify(substitute(dom_pc, (pc, BitVecVal(k, 3)))))
+
+    s = Solver()
+    s.add(dom_pc)
+    s.add(pc == 7)
+    print(s.check())
 
     return (mo,)
 
