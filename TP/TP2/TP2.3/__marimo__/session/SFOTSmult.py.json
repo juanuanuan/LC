@@ -19,21 +19,8 @@
       "console": []
     },
     {
-      "id": "HYCW",
-      "code_hash": "643b1cd6a5f855a74cd7b6f07ca86995",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h1 id=\"tp11\">TP1.1</h1>\n<h2 id=\"grupo-19\">Grupo 19</h2>\n<span class=\"paragraph\">Jo\u00e3o Pontes, A111657</span>\n<span class=\"paragraph\">Jo\u00e3o Paulo, A110393</span>\n<span class=\"paragraph\">Objetivo: </span>\n<div class=\"language-cbmbas highlight\"><pre><span></span><code><span class=\"mf\">1.</span><span class=\"w\"> </span><span class=\"n\">Construir</span><span class=\"w\"> </span><span class=\"n\">um</span><span class=\"w\"> </span><span class=\"n\">SFOTS</span><span class=\"p\">,</span><span class=\"w\"> </span><span class=\"n\">usando</span><span class=\"w\"> </span><span class=\"n\">BitVec</span><span class=\"err\">\u2019</span><span class=\"n\">s</span><span class=\"w\"> </span><span class=\"n\">de</span><span class=\"w\"> </span><span class=\"n\">tamanho</span><span class=\"w\"> </span><span class=\"n\">n</span><span class=\"w\"> </span><span class=\"p\">,</span><span class=\"w\"> </span><span class=\"n\">que</span><span class=\"w\"> </span><span class=\"n\">descreva</span><span class=\"w\"> </span><span class=\"n\">o</span><span class=\"w\"> </span><span class=\"n\">comportamento</span><span class=\"w\"> </span><span class=\"n\">de</span><span class=\"w\"> </span><span class=\"n\">um</span><span class=\"w\"> </span><span class=\"n\">dado</span><span class=\"w\"> </span><span class=\"n\">CFA</span><span class=\"w\"> </span><span class=\"p\">(</span><span class=\"kr\">Cont</span><span class=\"n\">rol</span><span class=\"w\"> </span><span class=\"n\">Flow</span><span class=\"w\"> </span><span class=\"n\">Automaton</span><span class=\"p\">);</span>\n\n<span class=\"mf\">2.</span><span class=\"w\"> </span><span class=\"n\">Usando</span><span class=\"w\"> </span><span class=\"n\">k</span><span class=\"o\">-</span><span class=\"n\">indu\u00e7\u00e3o</span><span class=\"w\"> </span><span class=\"n\">verificar</span><span class=\"w\"> </span><span class=\"n\">nesse</span><span class=\"w\"> </span><span class=\"n\">SFOTS</span><span class=\"w\"> </span><span class=\"n\">se</span><span class=\"w\"> </span><span class=\"n\">a</span><span class=\"w\"> </span><span class=\"n\">propriedade</span><span class=\"w\"> </span><span class=\"p\">(</span><span class=\"n\">x</span><span class=\"o\">*</span><span class=\"n\">y</span><span class=\"w\"> </span><span class=\"o\">+</span><span class=\"w\"> </span><span class=\"n\">z</span><span class=\"w\"> </span><span class=\"o\">=</span><span class=\"w\"> </span><span class=\"n\">a</span><span class=\"o\">*</span><span class=\"n\">b</span><span class=\"p\">)</span><span class=\"w\"> </span><span class=\"n\">\u00e9</span><span class=\"w\"> </span><span class=\"n\">um</span><span class=\"w\"> </span><span class=\"n\">invariante</span><span class=\"w\"> </span><span class=\"n\">do</span><span class=\"w\"> </span><span class=\"n\">seu</span><span class=\"w\"> </span><span class=\"n\">comportamento</span><span class=\"mf\">.</span>\n\n<span class=\"mf\">3.</span><span class=\"w\"> </span><span class=\"n\">Usando</span><span class=\"w\"> </span><span class=\"n\">k</span><span class=\"o\">-</span><span class=\"n\">indu\u00e7\u00e3o</span><span class=\"w\"> </span><span class=\"n\">no</span><span class=\"w\"> </span><span class=\"n\">SFOTS</span><span class=\"w\"> </span><span class=\"n\">acima</span><span class=\"w\"> </span><span class=\"n\">e</span><span class=\"w\"> </span><span class=\"n\">adicionando</span><span class=\"w\"> </span><span class=\"n\">ao</span><span class=\"w\"> </span><span class=\"n\">estado</span><span class=\"w\"> </span><span class=\"n\">inicial</span><span class=\"w\">  </span><span class=\"n\">a</span><span class=\"w\"> </span><span class=\"n\">condi\u00e7\u00e3o</span><span class=\"w\"> </span><span class=\"p\">(</span><span class=\"n\">a</span><span class=\"w\"> </span><span class=\"o\">&lt;</span><span class=\"w\"> </span><span class=\"mf\">2</span><span class=\"o\">^</span><span class=\"err\">{</span><span class=\"n\">n</span><span class=\"o\">/</span><span class=\"mf\">2</span><span class=\"err\">}</span><span class=\"p\">)</span><span class=\"w\"> </span><span class=\"err\">\u2227</span><span class=\"w\"> </span><span class=\"p\">(</span><span class=\"n\">b</span><span class=\"w\"> </span><span class=\"o\">&lt;</span><span class=\"w\"> </span><span class=\"mf\">2</span><span class=\"o\">^</span><span class=\"err\">{</span><span class=\"n\">n</span><span class=\"o\">/</span><span class=\"mf\">2</span><span class=\"err\">}</span><span class=\"p\">),</span><span class=\"w\"> </span><span class=\"n\">verificar</span><span class=\"w\"> </span><span class=\"n\">a</span><span class=\"w\"> </span><span class=\"n\">seguran\u00e7a</span><span class=\"w\"> </span><span class=\"n\">do</span><span class=\"w\"> </span><span class=\"n\">programa</span><span class=\"p\">;</span>\n\n<span class=\"mf\">4.</span><span class=\"w\"> </span><span class=\"n\">Codificar</span><span class=\"w\"> </span><span class=\"n\">a</span><span class=\"w\"> </span><span class=\"n\">propriedade</span><span class=\"w\"> </span><span class=\"n\">de</span><span class=\"w\"> </span><span class=\"n\">anima\u00e7\u00e3o</span><span class=\"w\"> </span><span class=\"n\">que</span><span class=\"w\"> </span><span class=\"nb\">exp</span><span class=\"n\">rime</span><span class=\"w\"> </span><span class=\"n\">que</span><span class=\"w\"> </span><span class=\"n\">o</span><span class=\"w\"> </span><span class=\"n\">programa</span><span class=\"w\"> </span><span class=\"n\">termina</span><span class=\"w\"> </span><span class=\"n\">quaisquer</span><span class=\"w\"> </span><span class=\"n\">que</span><span class=\"w\"> </span><span class=\"n\">sejam</span><span class=\"w\"> </span><span class=\"n\">os</span><span class=\"w\"> </span><span class=\"nb\">val</span><span class=\"ow\">or</span><span class=\"n\">es</span><span class=\"w\"> </span><span class=\"n\">iniciais</span><span class=\"w\"> </span><span class=\"n\">de</span><span class=\"w\"> </span><span class=\"n\">a</span><span class=\"w\"> </span><span class=\"n\">e</span><span class=\"w\"> </span><span class=\"n\">b</span><span class=\"w\"> </span><span class=\"n\">e</span><span class=\"w\"> </span><span class=\"n\">prove</span><span class=\"w\"> </span><span class=\"n\">que</span><span class=\"w\"> </span><span class=\"n\">ela</span><span class=\"w\"> </span><span class=\"n\">se</span><span class=\"w\"> </span><span class=\"n\">verifica</span><span class=\"w\"> </span><span class=\"n\">no</span><span class=\"w\"> </span><span class=\"n\">SFOTS</span><span class=\"mf\">.</span>\n</code></pre></div>\n<hr /></span>"
-          }
-        }
-      ],
-      "console": []
-    },
-    {
       "id": "MJUe",
-      "code_hash": "f50912d04baeabd3aada25a5f54c2a5a",
+      "code_hash": "0ef543be70c0edda364fb183b47b224f",
       "outputs": [
         {
           "type": "data",
@@ -50,6 +37,117 @@
           "mimetype": "text/plain"
         }
       ]
+    },
+    {
+      "id": "AYlF",
+      "code_hash": "7306659937aa1f474709abdd5db1f578",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Vari\u00e1veis Globais</strong></span>\n<hr /></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "SwtU",
+      "code_hash": "50decf2706f7fab6393a18cf33906a24",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "dYxp",
+      "code_hash": "0490e784a509f5047fec6a8f24981ab2",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Estado Inicial</strong></span>\n<hr /></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "zZLt",
+      "code_hash": "351ac9b42c4e7f350f9d097cc3faf929",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "sat\npc unsat\nx unsat\ny unsat\nz unsat\n[And(ULE(1, pc), UGE(6, pc)),\n And(2 == pc, x == a, y == b, z == 0)]\n",
+          "mimetype": "text/plain"
+        }
+      ]
+    },
+    {
+      "id": "dvwF",
+      "code_hash": "b2f6a0688f596dc50c4159d90baadb56",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Skip -&gt; Stop</strong></span>\n<hr /></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Zhue",
+      "code_hash": "ec00dc659033ade8bc06d71cf82a13b4",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "sat\npc_ unsat\nx_ unsat\ny_ unsat\ny unsat\nz_ unsat\na_ unsat\nb_ unsat\n[And(ULE(1, pc), UGE(6, pc)),\n And(2 == pc,\n     5 == pc_,\n     y == 0,\n     x_ == x,\n     y_ == y,\n     z == z_,\n     a_ == a,\n     b_ == b)]\n",
+          "mimetype": "text/plain"
+        }
+      ]
+    },
+    {
+      "id": "wwoG",
+      "code_hash": "a361683d90c48f3dbe9de25d04b0079a",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Skip -&gt; Left</strong></span>\n<hr /></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "EULS",
+      "code_hash": null,
+      "outputs": [],
+      "console": []
     }
   ]
 }
