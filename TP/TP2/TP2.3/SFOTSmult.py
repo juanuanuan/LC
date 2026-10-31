@@ -32,7 +32,7 @@ def _():
     from z3 import(
         BitVec, BitVecs, BitVecVal, Const, EnumSort, Solver,
         And, Or, Not, If, simplify, sat, unsat,
-        ULT, ULE, UGT, UGE, UDiv, LShR, substitute
+        ULT, ULE, UGT, UGE, UDiv, LShR, substitute, ZeroExt, Extract
     )
 
 
@@ -55,13 +55,30 @@ def _():
     print(s.check())
 
 
-    return And, BitVec, BitVecs, Not, Solver, dom_pc, mo, n_skip, n_stop, pc
+    return (
+        And,
+        BitVec,
+        BitVecs,
+        Extract,
+        Not,
+        Solver,
+        UDiv,
+        ZeroExt,
+        dom_pc,
+        mo,
+        n_error,
+        n_left,
+        n_right,
+        n_skip,
+        n_stop,
+        pc,
+    )
 
 
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    **Variáveis Globais**
+    **Variáveis Globais & Overflow check**
 
     ---
     """)
@@ -69,7 +86,7 @@ def _(mo):
 
 
 @app.cell
-def _(BitVec, BitVecs):
+def _(BitVec, BitVecs, Extract, ZeroExt):
     #n-bits
     n = 8
 
@@ -81,7 +98,14 @@ def _(BitVec, BitVecs):
     x_, y_, z_ = BitVecs('x_ y_ z_', n)
     pc_ = BitVec('pc_', 3)
 
-    return a, a_, b, b_, pc_, x, x_, y, y_, z, z_
+
+    def ovfl_add(u, v):
+        n_bits = u.size()
+        sum  = ZeroExt(1, u) + ZeroExt(1,v)
+        return Extract(n_bits, n_bits, sum) == 1
+    #def ovfl_dbl(u, v):
+    
+    return a, a_, b, b_, ovfl_add, pc_, x, x_, y, y_, z, z_
 
 
 @app.cell(hide_code=True)
@@ -177,7 +201,7 @@ def _(
         print(name1, stss.check()) # unsat em todos os restantes
         stss.pop()
 
-    print(stss.assertions()) # só dom_pc e initcf
+    print(stss.assertions()) 
 
     
     return
@@ -193,13 +217,415 @@ def _(mo):
     return
 
 
-app._unparsable_cell(
-    r"""
-    def skiptoleft():
-    
-    """,
-    name="_"
-)
+@app.cell
+def _(
+    And,
+    Not,
+    Solver,
+    a,
+    a_,
+    b,
+    b_,
+    dom_pc,
+    n_left,
+    n_skip,
+    pc,
+    pc_,
+    x,
+    x_,
+    y,
+    y_,
+    z,
+    z_,
+):
+    def skiptoleft(pc, x, y, z, a, b, pc_, x_, y_, z_, a_, b_):
+        return And(pc == n_skip, pc_ == n_left, x_ == x, y_ == y, z_ == z, a_ == a, b_ == b, (y & 1) == 0, y != 0)
+
+
+    stls = Solver()
+    stls.add(dom_pc)
+    stls.add(skiptoleft(pc, x, y, z, a, b, pc_, x_, y_, z_, a_, b_))
+    print(stls.check()) # sat neste caso
+
+    for name2, neg2 in [
+        ("pc",  Not(pc == n_skip)),
+        ("pc_", Not(pc_ == n_left)),
+        ("x_",  Not(x_ == x)),
+        ("y_",  Not(y_ == y)),
+        ("y",   Not(y != 0)),
+        ("y",   Not((y & 1) == 0)),
+        ("z_",  Not(z_ == z)),
+        ("a_",  Not(a_ == a)),
+        ("b_",  Not(b_ == b))   
+    ]:
+        stls.push()
+        stls.add(neg2)
+        print(name2, stls.check()) # unsat em todos os restantes
+        stls.pop()
+
+    print(stls.assertions()) 
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    **Skip -> Right**
+
+    ---
+    """)
+    return
+
+
+@app.cell
+def _(
+    And,
+    Not,
+    Solver,
+    a,
+    a_,
+    b,
+    b_,
+    dom_pc,
+    n_right,
+    n_skip,
+    pc,
+    pc_,
+    x,
+    x_,
+    y,
+    y_,
+    z,
+    z_,
+):
+    def skiptoright(pc, x, y, z, a, b, pc_, x_, y_, z_, a_, b_):
+        return And(pc == n_skip, pc_ == n_right, x_ == x, y_ == y, z_ == z, a_ == a, b_ == b, (y & 1) != 0, y != 0)
+
+    strs = Solver()
+    strs.add(dom_pc)
+    strs.add(skiptoright(pc, x, y, z, a, b, pc_, x_, y_, z_, a_, b_))
+    print(strs.check()) # sat neste caso
+
+    for name3, neg3 in [
+        ("pc",  Not(pc == n_skip)),
+        ("pc_", Not(pc_ == n_right)),
+        ("x_",  Not(x_ == x)),
+        ("y_",  Not(y_ == y)),
+        ("y",   Not(y != 0)),
+        ("y",   Not((y & 1) != 0)),
+        ("z_",  Not(z_ == z)),
+        ("a_",  Not(a_ == a)),
+        ("b_",  Not(b_ == b))   
+    ]:
+        strs.push()
+        strs.add(neg3)
+        print(name3, strs.check()) # unsat em todos os restantes
+        strs.pop()
+
+    print(strs.assertions()) 
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    **Left -> Skip**
+
+    ---
+    """)
+    return
+
+
+@app.cell
+def _(
+    And,
+    Not,
+    Solver,
+    UDiv,
+    a,
+    a_,
+    b,
+    b_,
+    dom_pc,
+    n_left,
+    n_skip,
+    ovfl_add,
+    pc,
+    pc_,
+    x,
+    x_,
+    y,
+    y_,
+    z,
+    z_,
+):
+    def lefttoskip(pc, x, y, z, a, b, pc_, x_, y_, z_, a_, b_):
+        return And(pc == n_left, pc_ == n_skip, Not(ovfl_add(x,x)), x_ == 2 * x, y_ == UDiv(y, 2), z_ == z, a_ == a, b_ == b) # adicionar overflow check aqui
+
+
+    ltss= Solver()
+    ltss.add(dom_pc)
+    ltss.add(lefttoskip(pc, x, y, z, a, b, pc_, x_, y_, z_, a_, b_))
+    print(ltss.check()) # sat neste caso
+
+    for name4, neg4 in [
+        ("pc",  Not(pc == n_left)),
+        ("pc_", Not(pc_ == n_skip)),
+        ("x_",  Not(x_ == 2 * x)),
+        ("y_",  Not(y_ == UDiv(y, 2))),
+        ("z_",  Not(z_ == z)),
+        ("a_",  Not(a_ == a)),
+        ("b_",  Not(b_ == b))   
+    ]:
+        ltss.push()
+        ltss.add(neg4)
+        print(name4, ltss.check()) # unsat em todos os restantes
+        ltss.pop()
+
+    print(ltss.assertions()) 
+    return (lefttoskip,)
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    **Right -> Skip**
+
+    ---
+    """)
+    return
+
+
+@app.cell
+def _(
+    And,
+    Not,
+    Solver,
+    a,
+    a_,
+    b,
+    b_,
+    dom_pc,
+    n_right,
+    n_skip,
+    ovfl_add,
+    pc,
+    pc_,
+    x,
+    x_,
+    y,
+    y_,
+    z,
+    z_,
+):
+    def righttoskip(pc, x, y, z, a, b, pc_, x_, y_, z_, a_, b_):
+        return And(Not(ovfl_add(z,x)), pc == n_right, pc_ == n_skip, x_ == x, y_ == y - 1, z_ == z + x, a_ == a, b_ == b)
+
+
+
+    rtss = Solver()
+    rtss.add(dom_pc)
+    rtss.add(righttoskip(pc, x, y, z, a, b, pc_, x_, y_, z_, a_, b_))
+    print(rtss.check()) # sat neste caso
+
+    for name5, neg5 in [
+        ("pc",  Not(pc == n_right)),
+        ("pc_", Not(pc_ == n_skip)),
+        ("x_",  Not(x_ == x)),
+        ("y_",  Not(y_ == y - 1)),
+        ("z_",  Not(z_ == z + x)),
+        ("a_",  Not(a_ == a)),
+        ("b_",  Not(b_ == b))   
+    ]:
+        rtss.push()
+        rtss.add(neg5)
+        print(name5, rtss.check()) # unsat em todos os restantes
+        rtss.pop()
+
+    print(rtss.assertions()) 
+
+    return (righttoskip,)
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    **Left -> Error**
+
+    ___
+    """)
+    return
+
+
+@app.cell
+def _(
+    And,
+    Not,
+    Solver,
+    a,
+    a_,
+    b,
+    b_,
+    dom_pc,
+    n_error,
+    n_left,
+    ovfl_add,
+    pc,
+    pc_,
+    x,
+    x_,
+    y,
+    y_,
+    z,
+    z_,
+):
+    def lefttoerror(pc, x, y, z, a, b, pc_, x_, y_, z_, a_, b_):
+        return And(pc == n_left, pc_ == n_error, ovfl_add(x, x), x_ == x, y_ == y, z_ == z, a_ == a, b_ == b)
+
+    ltes = Solver()
+    ltes.add(dom_pc)
+    ltes.add(lefttoerror(pc, x, y, z, a, b, pc_, x_, y_, z_, a_, b_))
+    print(ltes.check()) # sat neste caso
+
+    for name6, neg6 in [
+        ("pc",  Not(pc == n_left)),
+        ("pc_", Not(pc_ == n_error)),
+        ("x_",  Not(x_ == x)),
+        ("ovfl",Not(ovfl_add(x,x))),
+        ("y_",  Not(y_ == y)),
+        ("z_",  Not(z_ == z)),
+        ("a_",  Not(a_ == a)),
+        ("b_",  Not(b_ == b))   
+    ]:
+        ltes.push()
+        ltes.add(neg6)
+        print(name6, ltes.check()) # unsat em todos os restantes
+        ltes.pop()
+
+    print(ltes.assertions()) 
+
+    return (lefttoerror,)
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    **Right -> Error**
+
+    ---
+    """)
+    return
+
+
+@app.cell
+def _(
+    And,
+    Not,
+    Solver,
+    a,
+    a_,
+    b,
+    b_,
+    dom_pc,
+    n_error,
+    n_right,
+    ovfl_add,
+    pc,
+    pc_,
+    x,
+    x_,
+    y,
+    y_,
+    z,
+    z_,
+):
+    def righttoerror(pc, x, y, z, a, b, pc_, x_, y_, z_, a_, b_):
+        return And(pc == n_right, pc_ == n_error, ovfl_add(z, x), x_ == x, y_ == y, z_ == z, a_ == a, b_ == b)
+
+
+    rtes = Solver()
+    rtes.add(dom_pc)
+    rtes.add(righttoerror(pc, x, y, z, a, b, pc_, x_, y_, z_, a_, b_))
+    print(rtes.check()) # sat neste caso
+
+    for name7, neg7 in [
+        ("pc",  Not(pc == n_right)),
+        ("pc_", Not(pc_ == n_error)),
+        ("ovfl",Not(ovfl_add(z,x))),
+        ("x_",  Not(x_ == x)),
+        ("y_",  Not(y_ == y)),
+        ("z_",  Not(z_ == z)),
+        ("a_",  Not(a_ == a)),
+        ("b_",  Not(b_ == b))   
+    ]:
+        rtes.push()
+        rtes.add(neg7)
+        print(name7, rtes.check()) # unsat em todos os restantes
+        rtes.pop()
+
+    print(rtes.assertions()) 
+    return (righttoerror,)
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    **Teste Nodos Left & Right**
+
+    ---
+    """)
+    return
+
+
+@app.cell
+def _(
+    And,
+    Solver,
+    a,
+    a_,
+    b,
+    b_,
+    dom_pc,
+    lefttoerror,
+    lefttoskip,
+    pc,
+    pc_,
+    righttoerror,
+    righttoskip,
+    x,
+    x_,
+    y,
+    y_,
+    z,
+    z_,
+):
+    excl = Solver()
+    excl.add(dom_pc)
+    excl.add(And(lefttoskip(pc, x, y, z, a, b, pc_, x_, y_, z_, a_, b_),
+                 lefttoerror(pc, x, y, z, a, b, pc_, x_, y_, z_, a_, b_)))
+    print(excl.check())   # esperado: unsat
+
+    excr = Solver()
+    excr.add(dom_pc)
+    excr.add(And(righttoskip(pc, x, y, z, a, b, pc_, x_, y_, z_, a_, b_),
+                 righttoerror(pc, x, y, z, a, b, pc_, x_, y_, z_, a_, b_)))
+    print(excr.check())   # esperado: unsat
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    **Trans**
+
+    ---
+    """)
+    return
+
+
+@app.cell
+def _():
+    return
 
 
 if __name__ == "__main__":
