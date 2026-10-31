@@ -8,14 +8,7 @@
     {
       "id": "Hbol",
       "code_hash": "b03ae3d1a8c7e35b57a5d71425064bb8",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     },
     {
@@ -86,48 +79,20 @@
     {
       "id": "Xref",
       "code_hash": "d996cbf0c58a5c135608bcd0acc56bfa",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     },
     {
       "id": "SFPL",
       "code_hash": "2e0e78e9770da5298ee461b6e5a8f9e1",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     },
     {
       "id": "BYtC",
       "code_hash": "d5d083a716f70fc544d6f274933191f7",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
-      "console": [
-        {
-          "type": "stream",
-          "name": "stdout",
-          "text": "[5, 0, 0, 0, 0, 0, 0, 0, 0]\n[0, 0, 0, 0, 0, 0, 0, 0, 0]\n[0, 0, 0, 0, 0, 0, 0, 0, 0]\n[0, 0, 0, 0, 0, 0, 0, 0, 0]\n[0, 0, 0, 0, 0, 0, 0, 0, 0]\n[0, 0, 0, 0, 0, 0, 0, 0, 0]\n[0, 0, 0, 0, 0, 0, 0, 0, 0]\n[0, 0, 0, 0, 0, 0, 0, 0, 0]\n[0, 0, 0, 0, 0, 0, 0, 0, 0]\n",
-          "mimetype": "text/plain"
-        }
-      ]
+      "outputs": [],
+      "console": []
     },
     {
       "id": "RGSE",
@@ -145,14 +110,7 @@
     {
       "id": "Kclp",
       "code_hash": "13f273d165ab0bf565faee374c27f4d0",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     },
     {
@@ -171,35 +129,14 @@
     {
       "id": "Hstk",
       "code_hash": "dd11177e2462739efffe02db002a81aa",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     },
     {
       "id": "nWHF",
       "code_hash": "00fabadc128d125e9200570e034e177b",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
-      "console": [
-        {
-          "type": "stream",
-          "name": "stdout",
-          "text": "cube(1, 2): [(3, 6), (3, 7), (3, 8), (4, 6), (4, 7), (4, 8), (5, 6), (5, 7), (5, 8)]\npath -> : [(0, 2), (0, 3), (0, 4), (0, 5), (0, 6)]\npath <- : [(0, 2), (0, 3), (0, 4), (0, 5), (0, 6)]\nvertical: [(5, 4), (6, 4), (7, 4), (8, 4)]\n",
-          "mimetype": "text/plain"
-        }
-      ]
+      "outputs": [],
+      "console": []
     },
     {
       "id": "iLit",
@@ -217,35 +154,14 @@
     {
       "id": "ZHCJ",
       "code_hash": "d9f1e25865bfa07665e1dd3c541f9365",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     },
     {
       "id": "ROlb",
       "code_hash": "b000edf9dc5b0525497285aa938f8342",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
-      "console": [
-        {
-          "type": "stream",
-          "name": "stdout",
-          "text": "{(5, 6): 8, (4, 0): 6, (8, 7): 7}\n[0, 0, 0, 0, 0, 0, 0, 0, 0]\n[0, 0, 0, 0, 0, 0, 0, 0, 0]\n[0, 0, 0, 0, 0, 0, 0, 0, 0]\n[0, 0, 0, 0, 0, 0, 0, 0, 0]\n[6, 0, 0, 0, 0, 0, 0, 0, 0]\n[0, 0, 0, 0, 0, 0, 8, 0, 0]\n[0, 0, 0, 0, 0, 0, 0, 0, 0]\n[0, 0, 0, 0, 0, 0, 0, 0, 0]\n[0, 0, 0, 0, 0, 0, 0, 7, 0]\n",
-          "mimetype": "text/plain"
-        }
-      ]
+      "outputs": [],
+      "console": []
     },
     {
       "id": "qnkX",
@@ -263,35 +179,14 @@
     {
       "id": "TqIu",
       "code_hash": "c82d2ac3117b38823d8c475ee7845f04",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     },
     {
       "id": "Vxnm",
       "code_hash": "fb94dbd80dcfcd2137516caf290fd9d3",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
-      "console": [
-        {
-          "type": "stream",
-          "name": "stdout",
-          "text": "[1, 4, 2, 6, 8, 7, 3, 9, 5]\n[7, 3, 9, 2, 5, 1, 4, 8, 6]\n[6, 5, 8, 3, 9, 4, 7, 1, 2]\n[3, 9, 6, 1, 7, 5, 8, 2, 4]\n[5, 2, 7, 8, 4, 3, 9, 6, 1]\n[4, 8, 1, 9, 6, 2, 5, 3, 7]\n[2, 1, 5, 4, 3, 9, 6, 7, 8]\n[9, 6, 4, 7, 1, 8, 2, 5, 3]\n[8, 7, 3, 5, 2, 6, 1, 4, 9]\nImposs\u00edvel \u2192 None\n",
-          "mimetype": "text/plain"
-        }
-      ]
+      "outputs": [],
+      "console": []
     },
     {
       "id": "DnEU",
@@ -309,35 +204,14 @@
     {
       "id": "ulZA",
       "code_hash": "2b28ad9a3f2893d3df9bc3ec4de00e86",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     },
     {
       "id": "ecfG",
       "code_hash": "83fd7514c72ba3dc61621b3fb0652f5a",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
-      "console": [
-        {
-          "type": "stream",
-          "name": "stdout",
-          "text": "Tentativas: 1\nPistas: {(3, 5): 9, (3, 1): 8, (5, 2): 4}\n[3, 5, 9, 2, 4, 6, 1, 8, 7]\n[2, 1, 6, 7, 3, 8, 5, 9, 4]\n[8, 4, 7, 5, 9, 1, 3, 2, 6]\n[1, 8, 3, 6, 2, 9, 7, 4, 5]\n[5, 7, 2, 4, 1, 3, 9, 6, 8]\n[6, 9, 4, 8, 5, 7, 2, 3, 1]\n[4, 2, 1, 9, 6, 5, 8, 7, 3]\n[7, 6, 5, 3, 8, 2, 4, 1, 9]\n[9, 3, 8, 1, 7, 4, 6, 5, 2]\n",
-          "mimetype": "text/plain"
-        }
-      ]
+      "outputs": [],
+      "console": []
     },
     {
       "id": "Pvdt",
@@ -355,27 +229,13 @@
     {
       "id": "ZBYS",
       "code_hash": "4671e8ab595c5c562c72367639c13feb",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     },
     {
       "id": "aLJB",
       "code_hash": "838a78c2f76fa20e0f95b45ce9916d45",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/html": "<table style='border-collapse: collapse; font-family: monospace; font-size: 18px;'><tr><td style='border-top: 3px solid; border-left: 3px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>3</span></td><td style='border-top: 3px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>5</span></td><td style='border-top: 3px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>9</span></td><td style='border-top: 3px solid; border-left: 3px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>2</span></td><td style='border-top: 3px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>4</span></td><td style='border-top: 3px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>6</span></td><td style='border-top: 3px solid; border-left: 3px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>1</span></td><td style='border-top: 3px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>8</span></td><td style='border-top: 3px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 3px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>7</span></td></tr><tr><td style='border-top: 1px solid; border-left: 3px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>2</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>1</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>6</span></td><td style='border-top: 1px solid; border-left: 3px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>7</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>3</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>8</span></td><td style='border-top: 1px solid; border-left: 3px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>5</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>9</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 3px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>4</span></td></tr><tr><td style='border-top: 1px solid; border-left: 3px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>8</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>4</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>7</span></td><td style='border-top: 1px solid; border-left: 3px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>5</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>9</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>1</span></td><td style='border-top: 1px solid; border-left: 3px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>3</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>2</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 3px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>6</span></td></tr><tr><td style='border-top: 3px solid; border-left: 3px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>1</span></td><td style='border-top: 3px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center; background: rgba(128, 128, 128, 0.3);'><span style='font-weight: bold;'>8</span></td><td style='border-top: 3px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>3</span></td><td style='border-top: 3px solid; border-left: 3px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>6</span></td><td style='border-top: 3px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>2</span></td><td style='border-top: 3px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center; background: rgba(128, 128, 128, 0.3);'><span style='font-weight: bold;'>9</span></td><td style='border-top: 3px solid; border-left: 3px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>7</span></td><td style='border-top: 3px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>4</span></td><td style='border-top: 3px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 3px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>5</span></td></tr><tr><td style='border-top: 1px solid; border-left: 3px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>5</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>7</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>2</span></td><td style='border-top: 1px solid; border-left: 3px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>4</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>1</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>3</span></td><td style='border-top: 1px solid; border-left: 3px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>9</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>6</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 3px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>8</span></td></tr><tr><td style='border-top: 1px solid; border-left: 3px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>6</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>9</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center; background: rgba(128, 128, 128, 0.3);'><span style='font-weight: bold;'>4</span></td><td style='border-top: 1px solid; border-left: 3px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>8</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>5</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>7</span></td><td style='border-top: 1px solid; border-left: 3px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>2</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>3</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 3px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>1</span></td></tr><tr><td style='border-top: 3px solid; border-left: 3px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>4</span></td><td style='border-top: 3px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>2</span></td><td style='border-top: 3px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>1</span></td><td style='border-top: 3px solid; border-left: 3px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>9</span></td><td style='border-top: 3px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>6</span></td><td style='border-top: 3px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>5</span></td><td style='border-top: 3px solid; border-left: 3px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>8</span></td><td style='border-top: 3px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>7</span></td><td style='border-top: 3px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 3px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>3</span></td></tr><tr><td style='border-top: 1px solid; border-left: 3px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>7</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>6</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>5</span></td><td style='border-top: 1px solid; border-left: 3px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>3</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>8</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>2</span></td><td style='border-top: 1px solid; border-left: 3px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>4</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>1</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 1px solid; border-right: 3px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>9</span></td></tr><tr><td style='border-top: 1px solid; border-left: 3px solid; border-bottom: 3px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>9</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 3px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>3</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 3px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>8</span></td><td style='border-top: 1px solid; border-left: 3px solid; border-bottom: 3px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>1</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 3px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>7</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 3px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>4</span></td><td style='border-top: 1px solid; border-left: 3px solid; border-bottom: 3px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>6</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 3px solid; border-right: 1px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>5</span></td><td style='border-top: 1px solid; border-left: 1px solid; border-bottom: 3px solid; border-right: 3px solid; width: 32px; height: 32px; text-align: center;'><span style='color: #8a8a8a;'>2</span></td></tr></table>"
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     },
     {
@@ -394,53 +254,32 @@
     {
       "id": "xXTn",
       "code_hash": "55fdd5cf5d214e47bf4e6156c64b2241",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     },
     {
       "id": "AjVT",
       "code_hash": "ec61879aff9f55450914d488d5b2474e",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     },
     {
       "id": "pHFh",
       "code_hash": "d804fa6eb9508f7729f012e8eeac2836",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "NCOB",
+      "code_hash": "39100c0ded99e7ac0a2a82e1f366b0c1",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/plain": ""
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"utilizacao-de-lmm\">Utiliza\u00e7\u00e3o de LMM</h2>\n<span class=\"paragraph\">Neste trabalho foi usado um modelo de linguagem llm como apoio.\nFoi usado para:</span>\n<ul>\n<li>explicar conceitos (CSP, CP-SAT, Python e Marimo);</li>\n<li>sugerir e rever o c\u00f3digo de cada requisito;</li>\n<li>verificar que o notebook corre e cumpre o enunciado;</li>\n<li>ajudar a compreender e a explicar cada parte do c\u00f3digo.</li>\n</ul>\n<span class=\"paragraph\">Todo o c\u00f3digo foi lido, testado e compreendido pelo grupo antes de ser entregue.</span>\n<span class=\"paragraph\"><a href=\"https://share.gemini.google/5tLL75dZnSwZ\" rel=\"noopener noreferrer\" target=\"_blank\">https://share.gemini.google/5tLL75dZnSwZ</a></span></span>"
           }
         }
       ],
-      "console": [
-        {
-          "type": "stream",
-          "name": "stdout",
-          "text": "n=2: 10 Sudokus v\u00e1lidos, pistas respeitadas, add rejeita inv\u00e1lidos\nn=3: 10 Sudokus v\u00e1lidos, pistas respeitadas, add rejeita inv\u00e1lidos\nGrelha estragada de prop\u00f3sito -> Coluna 0 inv\u00e1lida\n",
-          "mimetype": "text/plain"
-        }
-      ]
-    },
-    {
-      "id": "NCOB",
-      "code_hash": null,
-      "outputs": [],
       "console": []
     }
   ]

@@ -61,17 +61,20 @@ def _():
         BitVecs,
         Extract,
         Not,
+        Or,
         Solver,
         UDiv,
         ZeroExt,
         dom_pc,
         mo,
         n_error,
+        n_init,
         n_left,
         n_right,
         n_skip,
         n_stop,
         pc,
+        sat,
     )
 
 
@@ -98,14 +101,13 @@ def _(BitVec, BitVecs, Extract, ZeroExt):
     x_, y_, z_ = BitVecs('x_ y_ z_', n)
     pc_ = BitVec('pc_', 3)
 
-
     def ovfl_add(u, v):
         n_bits = u.size()
         sum  = ZeroExt(1, u) + ZeroExt(1,v)
         return Extract(n_bits, n_bits, sum) == 1
     #def ovfl_dbl(u, v):
     
-    return a, a_, b, b_, ovfl_add, pc_, x, x_, y, y_, z, z_
+    return a, a_, b, b_, n, ovfl_add, pc_, x, x_, y, y_, z, z_
 
 
 @app.cell(hide_code=True)
@@ -120,7 +122,7 @@ def _(mo):
 
 @app.cell
 def _(And, Not, Solver, a, b, dom_pc, n_skip, pc, x, y, z):
-    def initcfa(pc, x, y, z, a, b):
+    def initcfa(pc, x, y, z, a, b): #init ja no skip
         return And(pc == n_skip, x == a, y == b, z == 0) #colocamos pc em skip, assim definimos x, y e z
 
     inits = Solver()
@@ -144,7 +146,7 @@ def _(And, Not, Solver, a, b, dom_pc, n_skip, pc, x, y, z):
 
 
 
-    return
+    return (initcfa,)
 
 
 @app.cell(hide_code=True)
@@ -204,7 +206,7 @@ def _(
     print(stss.assertions()) 
 
     
-    return
+    return (skiptostop,)
 
 
 @app.cell(hide_code=True)
@@ -264,7 +266,7 @@ def _(
         stls.pop()
 
     print(stls.assertions()) 
-    return
+    return (skiptoleft,)
 
 
 @app.cell(hide_code=True)
@@ -323,7 +325,7 @@ def _(
         strs.pop()
 
     print(strs.assertions()) 
-    return
+    return (skiptoright,)
 
 
 @app.cell(hide_code=True)
@@ -603,13 +605,13 @@ def _(
     excl.add(dom_pc)
     excl.add(And(lefttoskip(pc, x, y, z, a, b, pc_, x_, y_, z_, a_, b_),
                  lefttoerror(pc, x, y, z, a, b, pc_, x_, y_, z_, a_, b_)))
-    print(excl.check())   # esperado: unsat
+    print(excl.check())   # unsat
 
     excr = Solver()
     excr.add(dom_pc)
     excr.add(And(righttoskip(pc, x, y, z, a, b, pc_, x_, y_, z_, a_, b_),
                  righttoerror(pc, x, y, z, a, b, pc_, x_, y_, z_, a_, b_)))
-    print(excr.check())   # esperado: unsat
+    print(excr.check())   # unsat
     return
 
 
@@ -624,7 +626,149 @@ def _(mo):
 
 
 @app.cell
-def _():
+def _(
+    Or,
+    Solver,
+    a,
+    a_,
+    b,
+    b_,
+    dom_pc,
+    lefttoerror,
+    lefttoskip,
+    n_error,
+    n_init,
+    n_left,
+    n_right,
+    n_skip,
+    n_stop,
+    pc,
+    pc_,
+    righttoerror,
+    righttoskip,
+    skiptoleft,
+    skiptoright,
+    skiptostop,
+    x,
+    x_,
+    y,
+    y_,
+    z,
+    z_,
+):
+    status2 = (pc_, x_, y_, z_, a_, b_)
+    status1 = (pc, x, y, z, a, b)
+
+    def transcfa(status1, status2):
+        return Or(skiptostop(*status1, *status2), skiptoleft(*status1, *status2), skiptoright(*status1, *status2), lefttoskip(*status1, *status2), righttoskip(*status1, *status2), lefttoerror(*status1, *status2), righttoerror(*status1, *status2))
+
+
+    # base: transicao possivel entre dois estados simbolicos
+    t = Solver()
+    t.add(dom_pc)
+    t.add(transcfa(status1, status2))
+    print("base", t.check())            # sat
+
+    # estados terminais, ou seja, sem sucessor
+    for namet, node in [("stop", n_stop), ("error", n_error)]:
+        t.push()
+        t.add(pc == node)
+        print(namet, t.check())          # esperado: unsat
+        t.pop()
+
+    # cada nodo nao terminal tem sucessor
+    for namet, node in [("skip", n_skip), ("left", n_left), ("right", n_right)]:
+        t.push()
+        t.add(pc == node)
+        print(namet, t.check())          # sat
+        t.pop()
+
+    # pc_ só pode ser um nodo alcancavel por transicao (nunca init)
+    t.push()
+    t.add(pc_ == n_init)
+    print("pc_ == init", t.check())     # unsat
+    t.pop()
+
+    print(t.assertions())               # só dom_pc e transcfa
+    return (transcfa,)
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    **BMC**
+
+    ---
+    """)
+    return
+
+
+@app.cell
+def _(BitVec, BitVecs, Solver, initcfa, n, n_stop, sat, transcfa):
+    STEPS = 6   # nº de estados na sequência (6 estados = 5 transições)
+
+    # 1. Criar um estado (tuplo) por passo, com nomes distintos pelo índice
+    def newstate(i):
+        pc_i = BitVec(f'pc_{i}', 3)
+        x_i, y_i, z_i, a_i, b_i = BitVecs(f'x_{i} y_{i} z_{i} a_{i} b_{i}', n)
+        return (pc_i, x_i, y_i, z_i, a_i, b_i)
+
+    nodes = [newstate(i) for i in range(STEPS)]
+
+    # 2. Solver novo
+    bmc = Solver()
+
+    # 3. Primeiro estado satisfaz o estado inicial
+    bmc.add(initcfa(*nodes[0]))
+
+    # 4. Cada par consecutivo está ligado por transcfa
+    for i in range(STEPS - 1):
+        bmc.add(transcfa(nodes[i], nodes[i + 1]))
+
+    # 5. Fixar os inputs no estado 0 (as variáveis do passo 0, não as globais)
+    bmc.add(nodes[0][4] == 3)   # a
+    bmc.add(nodes[0][5] == 2)   # b
+
+    # 6. Pergunta: o último estado é stop com z == 6?
+    last = nodes[-1]
+    bmc.push()
+    bmc.add(last[0] == n_stop, last[3] == 6)
+    r = bmc.check()
+    print(r)
+    if r == sat:
+        m = bmc.model()
+        for i, e in enumerate(nodes):
+            print(i, m.eval(e[0]), m.eval(e[1]), m.eval(e[2]), m.eval(e[3]))
+    bmc.pop()
+
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    **Predicado de Erro**
+
+    ---
+    """)
+    return
+
+
+app._unparsable_cell(
+    r"""
+    def perrcfa(pc):
+    """,
+    name="_"
+)
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    **k-inducao**
+
+    ---
+    """)
     return
 
 

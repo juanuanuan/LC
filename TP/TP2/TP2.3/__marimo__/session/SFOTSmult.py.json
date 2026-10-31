@@ -53,7 +53,7 @@
     },
     {
       "id": "SwtU",
-      "code_hash": "6e324cb80b6f3cf326536e7053775626",
+      "code_hash": "555d531df208711c5c1f06653440e8ef",
       "outputs": [
         {
           "type": "data",
@@ -376,8 +376,94 @@
     },
     {
       "id": "ovLr",
-      "code_hash": null,
-      "outputs": [],
+      "code_hash": "4ecb8fe9b691aa32bc8f73e05f6450e6",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "base sat\nstop unsat\nerror unsat\nskip sat\nleft sat\nright sat\npc_ == init unsat\n[And(ULE(1, pc), UGE(6, pc)),\n Or(And(2 == pc,\n        5 == pc_,\n        y == 0,\n        x_ == x,\n        y_ == y,\n        z == z_,\n        a_ == a,\n        b_ == b),\n    And(2 == pc,\n        3 == pc_,\n        x_ == x,\n        y_ == y,\n        z_ == z,\n        a_ == a,\n        b_ == b,\n        y & 1 == 0,\n        y != 0),\n    And(2 == pc,\n        4 == pc_,\n        x_ == x,\n        y_ == y,\n        z_ == z,\n        a_ == a,\n        b_ == b,\n        y & 1 != 0,\n        y != 0),\n    And(3 == pc,\n        2 == pc_,\n        Not(Extract(8, 8, ZeroExt(1, x) + ZeroExt(1, x)) ==\n            1),\n        x_ == 2*x,\n        y_ == UDiv(y, 2),\n        z_ == z,\n        a_ == a,\n        b_ == b),\n    And(Not(Extract(8, 8, ZeroExt(1, z) + ZeroExt(1, x)) ==\n            1),\n        4 == pc,\n        2 == pc_,\n        x_ == x,\n        y_ == y - 1,\n        z_ == z + x,\n        a_ == a,\n        b_ == b),\n    And(3 == pc,\n        6 == pc_,\n        Extract(8, 8, ZeroExt(1, x) + ZeroExt(1, x)) == 1,\n        x_ == x,\n        y_ == y,\n        z_ == z,\n        a_ == a,\n        b_ == b),\n    And(4 == pc,\n        6 == pc_,\n        Extract(8, 8, ZeroExt(1, z) + ZeroExt(1, x)) == 1,\n        x_ == x,\n        y_ == y,\n        z_ == z,\n        a_ == a,\n        b_ == b))]\n",
+          "mimetype": "text/plain"
+        }
+      ]
+    },
+    {
+      "id": "kGEs",
+      "code_hash": "3e921dedfbb77ced2e762e2bec0a5950",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>BMC</strong></span>\n<hr /></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "tAKi",
+      "code_hash": "c03588a913e9803c85e1d4e079c735bb",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "sat\n0 2 3 2 0\n1 3 3 2 0\n2 2 6 1 0\n3 4 6 1 0\n4 2 6 0 6\n5 5 6 0 6\n",
+          "mimetype": "text/plain"
+        }
+      ]
+    },
+    {
+      "id": "DHIf",
+      "code_hash": "604833903a6facc30bc43784853429d5",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Predicado de Erro</strong></span>\n<hr /></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "CMzq",
+      "code_hash": "28c1b7f21905e7f7d51f71f62672d39a",
+      "outputs": [
+        {
+          "type": "error",
+          "ename": "syntax",
+          "evalue": "line 1\n    def epredicate(pc):\n                       ^\nIndentationError: expected an indented block after function definition on line 1\n",
+          "traceback": []
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "sznF",
+      "code_hash": "63b417769ad407038132733ebb9aa4b0",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>k-inducao</strong></span>\n<hr /></span>"
+          }
+        }
+      ],
       "console": []
     }
   ]
