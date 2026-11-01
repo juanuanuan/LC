@@ -475,20 +475,20 @@
     },
     {
       "id": "Zktk",
-      "code_hash": "dbd28ee337ebe7e1c0d4c36678729eb6",
+      "code_hash": "4ad22c0d79d4ee91dc7547d3df71aca9",
       "outputs": [
         {
-          "type": "error",
-          "ename": "exception",
-          "evalue": "list index out of range",
-          "traceback": null
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
         }
       ],
       "console": [
         {
           "type": "stream",
           "name": "stdout",
-          "text": "1 (unsat, sat)\n2 (unsat, unsat)\n3 (unsat, unsat)\n",
+          "text": "[3, 87, 199, 253, 50, 39]\n[2, 174, 99, 253, 50, 39]\n1 (unsat, sat)\n2 (unsat, unsat)\n3 (unsat, unsat)\n4 (unsat, unsat)\n5 (unsat, unsat)\n",
           "mimetype": "text/plain"
         }
       ]

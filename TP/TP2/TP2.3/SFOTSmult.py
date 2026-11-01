@@ -802,7 +802,7 @@ def _(mo):
 
 
 @app.cell
-def _(And, Not, Or, Solver, UGE, ULE, initcfa, newstate, transcfa):
+def _(And, Not, Or, Solver, UGE, ULE, initcfa, newstate, sat, transcfa):
     def invariant(pc, x, y, z, a, b):
         return (x * y + z == a* b)
 
@@ -837,6 +837,10 @@ def _(And, Not, Or, Solver, UGE, ULE, initcfa, newstate, transcfa):
         sind.add(Or([Not(invariant(*lastind))])) # para o k-ésimo nodo + 1
         #sind.add(dom(lastind[0]))
         rind = sind.check()
+        if rind == sat:
+            m = sind.model()
+            for e in knodesind:
+                print([m.eval(c) for c in e])
 
         return rbase, rind
 
