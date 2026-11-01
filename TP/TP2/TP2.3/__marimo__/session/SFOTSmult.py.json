@@ -20,7 +20,7 @@
     },
     {
       "id": "MJUe",
-      "code_hash": "89108c8ba790543e3e085b1bd8219a86",
+      "code_hash": "a89503975b4adf4502bbdb996a403c10",
       "outputs": [
         {
           "type": "data",
@@ -79,7 +79,7 @@
     },
     {
       "id": "zZLt",
-      "code_hash": "351ac9b42c4e7f350f9d097cc3faf929",
+      "code_hash": "5a996f461d922424958bdce5ceb56e01",
       "outputs": [
         {
           "type": "data",
@@ -92,7 +92,7 @@
         {
           "type": "stream",
           "name": "stdout",
-          "text": "sat\npc unsat\nx unsat\ny unsat\nz unsat\n[And(ULE(1, pc), UGE(6, pc)),\n And(2 == pc, x == a, y == b, z == 0)]\n",
+          "text": "sat\npc unsat\nx unsat\ny unsat\nz unsat\n[And(ULE(1, pc), UGE(6, pc)),\n And(ULT(a, 16),\n     ULT(b, 16),\n     And(2 == pc, x == a, y == b, z == 0))]\n",
           "mimetype": "text/plain"
         }
       ]
@@ -475,7 +475,7 @@
     },
     {
       "id": "Zktk",
-      "code_hash": "4ad22c0d79d4ee91dc7547d3df71aca9",
+      "code_hash": "c22f32133a10d136ecb72340f6929147",
       "outputs": [
         {
           "type": "data",
@@ -488,7 +488,40 @@
         {
           "type": "stream",
           "name": "stdout",
-          "text": "[3, 87, 199, 253, 50, 39]\n[2, 174, 99, 253, 50, 39]\n1 (unsat, sat)\n2 (unsat, unsat)\n3 (unsat, unsat)\n4 (unsat, unsat)\n5 (unsat, unsat)\n",
+          "text": "[3, 118, 1, 3, 11, 11]\n[2, 236, 0, 3, 11, 11]\n1 (unsat, sat)\n2 (unsat, unsat)\n3 (unsat, unsat)\n4 (unsat, unsat)\n5 (unsat, unsat)\n",
+          "mimetype": "text/plain"
+        }
+      ]
+    },
+    {
+      "id": "WkOe",
+      "code_hash": "8cc065ff528a47001d200d1de0115cf3",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Termina\u00e7\u00e3o</strong></span>\n<hr /></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "BGyG",
+      "code_hash": "948992837ebd83688db61aa544946562",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "unsat\n",
           "mimetype": "text/plain"
         }
       ]

@@ -32,7 +32,7 @@ def _():
     from z3 import(
         BitVec, BitVecs, BitVecVal, Const, EnumSort, Solver,
         And, Or, Not, If, simplify, sat, unsat,
-        ULT, ULE, UGT, UGE, UDiv, LShR, substitute, ZeroExt, Extract
+        ULT, ULE, UGT, UGE, UDiv, LShR, substitute, ZeroExt, Extract, Implies
     )
 
 
@@ -60,12 +60,14 @@ def _():
         BitVec,
         BitVecs,
         Extract,
+        Implies,
         Not,
         Or,
         Solver,
         UDiv,
         UGE,
         ULE,
+        ULT,
         ZeroExt,
         dom_pc,
         mo,
@@ -802,9 +804,29 @@ def _(mo):
 
 
 @app.cell
-def _(And, Not, Or, Solver, UGE, ULE, initcfa, newstate, sat, transcfa):
+def _(
+    And,
+    Not,
+    Or,
+    Solver,
+    UGE,
+    ULE,
+    ULT,
+    ZeroExt,
+    initcfa,
+    n,
+    newstate,
+    perrcfa,
+    sat,
+    transcfa,
+):
     def invariant(pc, x, y, z, a, b):
         return (x * y + z == a* b)
+
+    def stronginvariant(pc, x, y, z, a, b):
+        X, Y, Z = ZeroExt(n, x), ZeroExt(n, y), ZeroExt(n, z)
+        A, B = ZeroExt(n, a), ZeroExt(n, b)
+        return X * Y + Z == A * B
 
     def dom(ppc):
         return And(ULE(1,ppc), UGE(6,ppc))
@@ -814,11 +836,13 @@ def _(And, Not, Or, Solver, UGE, ULE, initcfa, newstate, sat, transcfa):
 
         sbase = Solver()
         sbase.add(initcfa(*knodes[0]))
-
+        sbase.add(ULT(knodes[0][4], 2 ** (n//2)), ULT(knodes[0][5], 2 ** (n//2))) #alínea c
+    
         for t in range(k - 1):
             sbase.add(transcfa(knodes[t], knodes[t + 1]))
-    
-        sbase.add(Or([Not(invariant(*e)) for e in knodes]))
+        
+        #sbase.add(Or([perrcfa(*e) for e in knodes]))
+        sbase.add(Or([Not(stronginvariant(*e)) for e in knodes]))
         rbase = sbase.check()
 
         knodesind = [newstate(u, 'ind') for u in range(k + 1)]
@@ -826,15 +850,18 @@ def _(And, Not, Or, Solver, UGE, ULE, initcfa, newstate, sat, transcfa):
         sind = Solver()
         for e in knodesind:
             sind.add(dom(e[0])) #escolhe aleatoriamente um estado (sujeito ao dominio pc e trans) para começar
+            sind.add(ULT(e[4], 2 ** (n//2)), ULT(e[5], 2 ** (n//2))) # alinea c
 
         for j in range(k):
             sind.add(transcfa(knodesind[j], knodesind[j + 1]))
 
         lastind = knodesind[-1]
         for state in knodesind[:-1]: # para o k-ésimo nodo
-            sind.add(invariant(*state))
+            sind.add(stronginvariant(*state))
+            sind.add(Not(perrcfa(*state)))
     
-        sind.add(Or([Not(invariant(*lastind))])) # para o k-ésimo nodo + 1
+        sind.add(Or([Not(stronginvariant(*lastind))])) # para o k-ésimo nodo + 1
+        #sind.add(perrcfa(*lastind))
         #sind.add(dom(lastind[0]))
         rind = sind.check()
         if rind == sat:
@@ -846,7 +873,64 @@ def _(And, Not, Or, Solver, UGE, ULE, initcfa, newstate, sat, transcfa):
 
     
     for o in range (1,6): print(o, kind(o))
-    
+    return (dom,)
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    **Terminação**
+
+    ---
+    """)
+    return
+
+
+@app.cell
+def _(
+    And,
+    Implies,
+    Not,
+    Or,
+    Solver,
+    ULE,
+    ULT,
+    a,
+    a_,
+    b,
+    b_,
+    dom,
+    n_left,
+    n_right,
+    n_skip,
+    pc,
+    pc_,
+    sat,
+    transcfa,
+    x,
+    x_,
+    y,
+    y_,
+    z,
+    z_,
+):
+    def variant(pc, x, y, z, a, b, pc_, x_, y_, z_, a_, b_):
+        return And(
+            Implies(And(Or(pc == n_left, pc == n_right),y != 0,pc_ == n_skip),ULT(y_, y)), Implies(pc == n_skip, ULE(y_, y))    # em skip, y não aumenta
+        )
+
+
+    est  = (pc,  x,  y,  z,  a,  b)
+    est_ = (pc_, x_, y_, z_, a_, b_)
+
+    sv = Solver()
+    sv.add(dom(pc), dom(pc_))
+    sv.add(transcfa(est, est_))
+    sv.add(Not(variant(*est, *est_)))
+    print(sv.check())   # esperado: unsat
+
+    if sv.check() == sat:
+        print(sv.model())
     return
 
 
