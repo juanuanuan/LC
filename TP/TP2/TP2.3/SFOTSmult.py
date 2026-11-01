@@ -64,6 +64,8 @@ def _():
         Or,
         Solver,
         UDiv,
+        UGE,
+        ULE,
         ZeroExt,
         dom_pc,
         mo,
@@ -673,7 +675,7 @@ def _(
     for namet, node in [("stop", n_stop), ("error", n_error)]:
         t.push()
         t.add(pc == node)
-        print(namet, t.check())          # esperado: unsat
+        print(namet, t.check())          # unsat
         t.pop()
 
     # cada nodo nao terminal tem sucessor
@@ -690,58 +692,9 @@ def _(
     t.pop()
 
     print(t.assertions())               # só dom_pc e transcfa
+
+
     return (transcfa,)
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(r"""
-    **BMC**
-
-    ---
-    """)
-    return
-
-
-@app.cell
-def _(BitVec, BitVecs, Solver, initcfa, n, n_stop, sat, transcfa):
-    STEPS = 6   # nº de estados na sequência (6 estados = 5 transições)
-
-    # 1. Criar um estado (tuplo) por passo, com nomes distintos pelo índice
-    def newstate(i):
-        pc_i = BitVec(f'pc_{i}', 3)
-        x_i, y_i, z_i, a_i, b_i = BitVecs(f'x_{i} y_{i} z_{i} a_{i} b_{i}', n)
-        return (pc_i, x_i, y_i, z_i, a_i, b_i)
-
-    nodes = [newstate(i) for i in range(STEPS)]
-
-    # 2. Solver novo
-    bmc = Solver()
-
-    # 3. Primeiro estado satisfaz o estado inicial
-    bmc.add(initcfa(*nodes[0]))
-
-    # 4. Cada par consecutivo está ligado por transcfa
-    for i in range(STEPS - 1):
-        bmc.add(transcfa(nodes[i], nodes[i + 1]))
-
-    # 5. Fixar os inputs no estado 0 (as variáveis do passo 0, não as globais)
-    bmc.add(nodes[0][4] == 3)   # a
-    bmc.add(nodes[0][5] == 2)   # b
-
-    # 6. Pergunta: o último estado é stop com z == 6?
-    last = nodes[-1]
-    bmc.push()
-    bmc.add(last[0] == n_stop, last[3] == 6)
-    r = bmc.check()
-    print(r)
-    if r == sat:
-        m = bmc.model()
-        for i, e in enumerate(nodes):
-            print(i, m.eval(e[0]), m.eval(e[1]), m.eval(e[2]), m.eval(e[3]))
-    bmc.pop()
-
-    return
 
 
 @app.cell(hide_code=True)
@@ -754,21 +707,142 @@ def _(mo):
     return
 
 
-app._unparsable_cell(
-    r"""
-    def perrcfa(pc):
-    """,
-    name="_"
-)
+@app.cell
+def _(Not, Solver, a, b, dom_pc, n_error, pc, x, y, z):
+    def perrcfa(pc, x, y, z, a, b):
+        return pc == n_error #se o estado é erro
+
+
+    errs = Solver()
+    errs.add(dom_pc)
+    errs.add(perrcfa(pc, x, y, z, a, b))
+    print(errs.check()) # sat neste caso
+
+    for name8, neg8 in [
+        ("pc",  Not(pc == n_error))   
+    ]:
+        errs.push()
+        errs.add(neg8)
+        print(name8, errs.check()) # unsat em todos os restantes
+        errs.pop()
+
+    print(errs.assertions()) 
+
+    #print(type(n_error), n_error)
+    return (perrcfa,)
 
 
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    **k-inducao**
+    **Model Check**
 
     ---
     """)
+    return
+
+
+@app.cell
+def _(BitVec, BitVecs, Or, Solver, initcfa, n, n_stop, perrcfa, sat, transcfa):
+    STEPS = 10   # num de estados na sequência (6 estados = 5 transições)
+
+    # indexação das variáveis por estado/nodo
+    def newstate(i, str):
+        pc_i = BitVec(f'pc_{i}', 3)
+        x_i, y_i, z_i, a_i, b_i = BitVecs(f'x_{i} y_{i} z_{i} a_{i} b_{i}', n)
+        return (pc_i, x_i, y_i, z_i, a_i, b_i)
+
+    nodes = [newstate(i, 'bmc') for i in range(STEPS)]
+
+    # bmc solver
+    bmc = Solver()
+
+    # estado init
+    bmc.add(initcfa(*nodes[0]))
+
+    # cada par consecutivo está ligado por transcfa
+    for i in range(STEPS - 1):
+        bmc.add(transcfa(nodes[i], nodes[i + 1]))
+
+    # fixação de input
+    bmc.add(nodes[0][4] == 5)   # a
+    bmc.add(nodes[0][5] == 5)   # b
+
+    last = nodes[-1]
+    bmc.push()
+    bmc.add(last[0] == n_stop, last[3] == 25) # valor de z no stop
+    r = bmc.check()
+    print(r)
+    if r == sat:
+        m = bmc.model()
+        for i, e in enumerate(nodes):
+            print(i, m.eval(e[0]), m.eval(e[1]), m.eval(e[2]), m.eval(e[3]))
+    bmc.pop()
+
+    bmc.push()
+    bmc.add(Or([perrcfa(pc, x, y, z, a, b) for pc, x, y, z, a, b in nodes]))
+    r = bmc.check()
+    print(r)
+    if r == sat:
+        m = bmc.model()
+        for i, e in enumerate(nodes):
+            print(i, m.eval(e[0]), m.eval(e[1]), m.eval(e[2]), m.eval(e[3]))
+    bmc.pop()
+    return (newstate,)
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    **k-inducao k+1**
+
+    ---
+    """)
+    return
+
+
+@app.cell
+def _(And, Not, Or, Solver, UGE, ULE, initcfa, newstate, transcfa):
+    def invariant(pc, x, y, z, a, b):
+        return (x * y + z == a* b)
+
+    def dom(ppc):
+        return And(ULE(1,ppc), UGE(6,ppc))
+
+    def kind(k):
+        knodes = [newstate(m, 'base') for m in range(k)]
+
+        sbase = Solver()
+        sbase.add(initcfa(*knodes[0]))
+
+        for t in range(k - 1):
+            sbase.add(transcfa(knodes[t], knodes[t + 1]))
+    
+        sbase.add(Or([Not(invariant(*e)) for e in knodes]))
+        rbase = sbase.check()
+
+        knodesind = [newstate(u, 'ind') for u in range(k + 1)]
+
+        sind = Solver()
+        for e in knodesind:
+            sind.add(dom(e[0])) #escolhe aleatoriamente um estado (sujeito ao dominio pc e trans) para começar
+
+        for j in range(k):
+            sind.add(transcfa(knodesind[j], knodesind[j + 1]))
+
+        lastind = knodesind[-1]
+        for state in knodesind[:-1]: # para o k-ésimo nodo
+            sind.add(invariant(*state))
+    
+        sind.add(Or([Not(invariant(*lastind))])) # para o k-ésimo nodo + 1
+        #sind.add(dom(lastind[0]))
+        rind = sind.check()
+
+        return rbase, rind
+
+    
+    for o in range (1,6): print(o, kind(o))
+    
     return
 
 

@@ -53,7 +53,7 @@
     },
     {
       "id": "SwtU",
-      "code_hash": "555d531df208711c5c1f06653440e8ef",
+      "code_hash": "1834b850f814ebc1d83b4f2ece3613d9",
       "outputs": [
         {
           "type": "data",
@@ -376,7 +376,7 @@
     },
     {
       "id": "ovLr",
-      "code_hash": "4ecb8fe9b691aa32bc8f73e05f6450e6",
+      "code_hash": "a730da9bbf16b97dddf28f1483cc9f15",
       "outputs": [
         {
           "type": "data",
@@ -390,39 +390,6 @@
           "type": "stream",
           "name": "stdout",
           "text": "base sat\nstop unsat\nerror unsat\nskip sat\nleft sat\nright sat\npc_ == init unsat\n[And(ULE(1, pc), UGE(6, pc)),\n Or(And(2 == pc,\n        5 == pc_,\n        y == 0,\n        x_ == x,\n        y_ == y,\n        z == z_,\n        a_ == a,\n        b_ == b),\n    And(2 == pc,\n        3 == pc_,\n        x_ == x,\n        y_ == y,\n        z_ == z,\n        a_ == a,\n        b_ == b,\n        y & 1 == 0,\n        y != 0),\n    And(2 == pc,\n        4 == pc_,\n        x_ == x,\n        y_ == y,\n        z_ == z,\n        a_ == a,\n        b_ == b,\n        y & 1 != 0,\n        y != 0),\n    And(3 == pc,\n        2 == pc_,\n        Not(Extract(8, 8, ZeroExt(1, x) + ZeroExt(1, x)) ==\n            1),\n        x_ == 2*x,\n        y_ == UDiv(y, 2),\n        z_ == z,\n        a_ == a,\n        b_ == b),\n    And(Not(Extract(8, 8, ZeroExt(1, z) + ZeroExt(1, x)) ==\n            1),\n        4 == pc,\n        2 == pc_,\n        x_ == x,\n        y_ == y - 1,\n        z_ == z + x,\n        a_ == a,\n        b_ == b),\n    And(3 == pc,\n        6 == pc_,\n        Extract(8, 8, ZeroExt(1, x) + ZeroExt(1, x)) == 1,\n        x_ == x,\n        y_ == y,\n        z_ == z,\n        a_ == a,\n        b_ == b),\n    And(4 == pc,\n        6 == pc_,\n        Extract(8, 8, ZeroExt(1, z) + ZeroExt(1, x)) == 1,\n        x_ == x,\n        y_ == y,\n        z_ == z,\n        a_ == a,\n        b_ == b))]\n",
-          "mimetype": "text/plain"
-        }
-      ]
-    },
-    {
-      "id": "kGEs",
-      "code_hash": "3e921dedfbb77ced2e762e2bec0a5950",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>BMC</strong></span>\n<hr /></span>"
-          }
-        }
-      ],
-      "console": []
-    },
-    {
-      "id": "tAKi",
-      "code_hash": "c03588a913e9803c85e1d4e079c735bb",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
-      "console": [
-        {
-          "type": "stream",
-          "name": "stdout",
-          "text": "sat\n0 2 3 2 0\n1 3 3 2 0\n2 2 6 1 0\n3 4 6 1 0\n4 2 6 0 6\n5 5 6 0 6\n",
           "mimetype": "text/plain"
         }
       ]
@@ -442,29 +409,89 @@
     },
     {
       "id": "CMzq",
-      "code_hash": "28c1b7f21905e7f7d51f71f62672d39a",
+      "code_hash": "9b231566119573533f506eedd15dd362",
       "outputs": [
         {
-          "type": "error",
-          "ename": "syntax",
-          "evalue": "line 1\n    def epredicate(pc):\n                       ^\nIndentationError: expected an indented block after function definition on line 1\n",
-          "traceback": []
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "sat\npc unsat\n[And(ULE(1, pc), UGE(6, pc)), 6 == pc]\n",
+          "mimetype": "text/plain"
+        }
+      ]
+    },
+    {
+      "id": "kGEs",
+      "code_hash": "4552980ca0b7c7c8b384905bef4bd383",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Model Check</strong></span>\n<hr /></span>"
+          }
         }
       ],
       "console": []
     },
     {
-      "id": "sznF",
-      "code_hash": "63b417769ad407038132733ebb9aa4b0",
+      "id": "tAKi",
+      "code_hash": "9715ff0dbe5edcc38f111a241e95460e",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>k-inducao</strong></span>\n<hr /></span>"
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "sat\n0 2 5 5 0\n1 4 5 5 0\n2 2 5 4 5\n3 3 5 4 5\n4 2 10 2 5\n5 3 10 2 5\n6 2 20 1 5\n7 4 20 1 5\n8 2 20 0 25\n9 5 20 0 25\nunsat\n",
+          "mimetype": "text/plain"
+        }
+      ]
+    },
+    {
+      "id": "sznF",
+      "code_hash": "f96e2c5536b7d93de8c94ecdb7a9c532",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>k-inducao k+1</strong></span>\n<hr /></span>"
           }
         }
       ],
       "console": []
+    },
+    {
+      "id": "Zktk",
+      "code_hash": "dbd28ee337ebe7e1c0d4c36678729eb6",
+      "outputs": [
+        {
+          "type": "error",
+          "ename": "exception",
+          "evalue": "list index out of range",
+          "traceback": null
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "1 (unsat, sat)\n2 (unsat, unsat)\n3 (unsat, unsat)\n",
+          "mimetype": "text/plain"
+        }
+      ]
     }
   ]
 }
