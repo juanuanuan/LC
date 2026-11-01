@@ -54,7 +54,6 @@ def _():
     s.add(dom_pc)
     print(s.check())
 
-
     return (
         And,
         BitVec,
@@ -110,7 +109,7 @@ def _(BitVec, BitVecs, Extract, ZeroExt):
         sum  = ZeroExt(1, u) + ZeroExt(1,v)
         return Extract(n_bits, n_bits, sum) == 1
     #def ovfl_dbl(u, v):
-    
+
     return a, a_, b, b_, n, ovfl_add, pc_, x, x_, y, y_, z, z_
 
 
@@ -146,7 +145,6 @@ def _(And, Not, Solver, a, b, dom_pc, n_skip, pc, x, y, z):
         inits.pop()
 
     print(inits.assertions()) # só dom_pc e initcf
-
 
 
 
@@ -209,7 +207,7 @@ def _(
 
     print(stss.assertions()) 
 
-    
+
     return (skiptostop,)
 
 
@@ -449,7 +447,6 @@ def _(
         rtss.pop()
 
     print(rtss.assertions()) 
-
     return (righttoskip,)
 
 
@@ -509,7 +506,6 @@ def _(
         ltes.pop()
 
     print(ltes.assertions()) 
-
     return (lefttoerror,)
 
 
@@ -695,7 +691,6 @@ def _(
 
     print(t.assertions())               # só dom_pc e transcfa
 
-
     return (transcfa,)
 
 
@@ -837,10 +832,10 @@ def _(
         sbase = Solver()
         sbase.add(initcfa(*knodes[0]))
         sbase.add(ULT(knodes[0][4], 2 ** (n//2)), ULT(knodes[0][5], 2 ** (n//2))) #alínea c
-    
+
         for t in range(k - 1):
             sbase.add(transcfa(knodes[t], knodes[t + 1]))
-        
+    
         #sbase.add(Or([perrcfa(*e) for e in knodes]))
         sbase.add(Or([Not(stronginvariant(*e)) for e in knodes]))
         rbase = sbase.check()
@@ -859,7 +854,7 @@ def _(
         for state in knodesind[:-1]: # para o k-ésimo nodo
             sind.add(stronginvariant(*state))
             sind.add(Not(perrcfa(*state)))
-    
+
         sind.add(Or([Not(stronginvariant(*lastind))])) # para o k-ésimo nodo + 1
         #sind.add(perrcfa(*lastind))
         #sind.add(dom(lastind[0]))
@@ -871,7 +866,7 @@ def _(
 
         return rbase, rind
 
-    
+
     for o in range (1,6): print(o, kind(o))
     return (dom,)
 
@@ -930,7 +925,7 @@ def _(
     print(sv.check())   # esperado: unsat
 
     if sv.check() == sat:
-        print(sv.model())
+        print(sv.model()) 
     return
 
 

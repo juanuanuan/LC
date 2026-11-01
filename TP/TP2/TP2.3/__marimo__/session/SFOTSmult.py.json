@@ -39,327 +39,124 @@
       ]
     },
     {
-      "id": "AYlF",
-      "code_hash": "8dfe29de108bf42cd0edfa0ac1a93f03",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Vari\u00e1veis Globais &amp; Overflow check</strong></span>\n<hr /></span>"
-          }
-        }
-      ],
+      "id": "vblA",
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
-      "id": "SwtU",
-      "code_hash": "1834b850f814ebc1d83b4f2ece3613d9",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
+      "id": "bkHC",
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
-      "id": "dYxp",
-      "code_hash": "0490e784a509f5047fec6a8f24981ab2",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Estado Inicial</strong></span>\n<hr /></span>"
-          }
-        }
-      ],
+      "id": "lEQa",
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
-      "id": "zZLt",
-      "code_hash": "5a996f461d922424958bdce5ceb56e01",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
-      "console": [
-        {
-          "type": "stream",
-          "name": "stdout",
-          "text": "sat\npc unsat\nx unsat\ny unsat\nz unsat\n[And(ULE(1, pc), UGE(6, pc)),\n And(ULT(a, 16),\n     ULT(b, 16),\n     And(2 == pc, x == a, y == b, z == 0))]\n",
-          "mimetype": "text/plain"
-        }
-      ]
-    },
-    {
-      "id": "dvwF",
-      "code_hash": "b2f6a0688f596dc50c4159d90baadb56",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Skip -&gt; Stop</strong></span>\n<hr /></span>"
-          }
-        }
-      ],
+      "id": "PKri",
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
-      "id": "Zhue",
-      "code_hash": "ec00dc659033ade8bc06d71cf82a13b4",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
-      "console": [
-        {
-          "type": "stream",
-          "name": "stdout",
-          "text": "sat\npc_ unsat\nx_ unsat\ny_ unsat\ny unsat\nz_ unsat\na_ unsat\nb_ unsat\n[And(ULE(1, pc), UGE(6, pc)),\n And(2 == pc,\n     5 == pc_,\n     y == 0,\n     x_ == x,\n     y_ == y,\n     z == z_,\n     a_ == a,\n     b_ == b)]\n",
-          "mimetype": "text/plain"
-        }
-      ]
-    },
-    {
-      "id": "wwoG",
-      "code_hash": "a361683d90c48f3dbe9de25d04b0079a",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Skip -&gt; Left</strong></span>\n<hr /></span>"
-          }
-        }
-      ],
+      "id": "Xref",
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
-      "id": "EULS",
-      "code_hash": "b36f452e644ba2117e0bf7ba92907b55",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
-      "console": [
-        {
-          "type": "stream",
-          "name": "stdout",
-          "text": "sat\npc unsat\npc_ unsat\nx_ unsat\ny_ unsat\ny unsat\ny unsat\nz_ unsat\na_ unsat\nb_ unsat\n[And(ULE(1, pc), UGE(6, pc)),\n And(2 == pc,\n     3 == pc_,\n     x_ == x,\n     y_ == y,\n     z_ == z,\n     a_ == a,\n     b_ == b,\n     y & 1 == 0,\n     y != 0)]\n",
-          "mimetype": "text/plain"
-        }
-      ]
-    },
-    {
-      "id": "dloj",
-      "code_hash": "0fc3b8aa1c10d435065d2d861eb69710",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Skip -&gt; Right</strong></span>\n<hr /></span>"
-          }
-        }
-      ],
+      "id": "SFPL",
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
-      "id": "aUbH",
-      "code_hash": "890b51ee9beb9e2e96cd68c830a09181",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
-      "console": [
-        {
-          "type": "stream",
-          "name": "stdout",
-          "text": "sat\npc unsat\npc_ unsat\nx_ unsat\ny_ unsat\ny unsat\ny unsat\nz_ unsat\na_ unsat\nb_ unsat\n[And(ULE(1, pc), UGE(6, pc)),\n And(2 == pc,\n     4 == pc_,\n     x_ == x,\n     y_ == y,\n     z_ == z,\n     a_ == a,\n     b_ == b,\n     y & 1 != 0,\n     y != 0)]\n",
-          "mimetype": "text/plain"
-        }
-      ]
-    },
-    {
-      "id": "jJNg",
-      "code_hash": "858f82298a0598e31c88b77911b9ffbd",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Left -&gt; Skip</strong></span>\n<hr /></span>"
-          }
-        }
-      ],
+      "id": "BYtC",
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
-      "id": "jEHu",
-      "code_hash": "3f95b4d8faa9492ae3ab3a6337f7bbca",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
-      "console": [
-        {
-          "type": "stream",
-          "name": "stdout",
-          "text": "sat\npc unsat\npc_ unsat\nx_ unsat\ny_ unsat\nz_ unsat\na_ unsat\nb_ unsat\n[And(ULE(1, pc), UGE(6, pc)),\n And(3 == pc,\n     2 == pc_,\n     Not(Extract(8, 8, ZeroExt(1, x) + ZeroExt(1, x)) == 1),\n     x_ == 2*x,\n     y_ == UDiv(y, 2),\n     z_ == z,\n     a_ == a,\n     b_ == b)]\n",
-          "mimetype": "text/plain"
-        }
-      ]
-    },
-    {
-      "id": "GdVh",
-      "code_hash": "c448fb2a1c90cf7e1fd5dbbf48f265a7",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Right -&gt; Skip</strong></span>\n<hr /></span>"
-          }
-        }
-      ],
+      "id": "RGSE",
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
-      "id": "yqZj",
-      "code_hash": "84c5e5302c8c571c884c0afba5a9517c",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
-      "console": [
-        {
-          "type": "stream",
-          "name": "stdout",
-          "text": "sat\npc unsat\npc_ unsat\nx_ unsat\ny_ unsat\nz_ unsat\na_ unsat\nb_ unsat\n[And(ULE(1, pc), UGE(6, pc)),\n And(Not(Extract(8, 8, ZeroExt(1, z) + ZeroExt(1, x)) == 1),\n     4 == pc,\n     2 == pc_,\n     x_ == x,\n     y_ == y - 1,\n     z_ == z + x,\n     a_ == a,\n     b_ == b)]\n",
-          "mimetype": "text/plain"
-        }
-      ]
-    },
-    {
-      "id": "TqOn",
-      "code_hash": "14ebb4010c60c241a104d954dc44139f",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Left -&gt; Error</strong></span>\n<hr /></span>"
-          }
-        }
-      ],
+      "id": "Kclp",
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
-      "id": "ySIM",
-      "code_hash": "1e744916957623c1886a643f3f89187d",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
-      "console": [
-        {
-          "type": "stream",
-          "name": "stdout",
-          "text": "sat\npc unsat\npc_ unsat\nx_ unsat\novfl unsat\ny_ unsat\nz_ unsat\na_ unsat\nb_ unsat\n[And(ULE(1, pc), UGE(6, pc)),\n And(3 == pc,\n     6 == pc_,\n     Extract(8, 8, ZeroExt(1, x) + ZeroExt(1, x)) == 1,\n     x_ == x,\n     y_ == y,\n     z_ == z,\n     a_ == a,\n     b_ == b)]\nsat\n",
-          "mimetype": "text/plain"
-        }
-      ]
-    },
-    {
-      "id": "dzYd",
-      "code_hash": "1c55eea73d0348900b64d13694aa6b1b",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Right -&gt; Error</strong></span>\n<hr /></span>"
-          }
-        }
-      ],
+      "id": "emfo",
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
-      "id": "eEAr",
-      "code_hash": "61d3c6dd769e61872e57dce536001b42",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
-      "console": [
-        {
-          "type": "stream",
-          "name": "stdout",
-          "text": "sat\npc unsat\npc_ unsat\novfl unsat\nx_ unsat\ny_ unsat\nz_ unsat\na_ unsat\nb_ unsat\n[And(ULE(1, pc), UGE(6, pc)),\n And(4 == pc,\n     6 == pc_,\n     Extract(8, 8, ZeroExt(1, z) + ZeroExt(1, x)) == 1,\n     x_ == x,\n     y_ == y,\n     z_ == z,\n     a_ == a,\n     b_ == b)]\n",
-          "mimetype": "text/plain"
-        }
-      ]
-    },
-    {
-      "id": "vqXq",
-      "code_hash": "27cd0d360d602207c4fa6ba71ca0876b",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Teste Nodos Left &amp; Right</strong></span>\n<hr /></span>"
-          }
-        }
-      ],
+      "id": "Hstk",
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
-      "id": "WATE",
-      "code_hash": "963a73064469a3498eabd45326cf4860",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
-      "console": [
-        {
-          "type": "stream",
-          "name": "stdout",
-          "text": "unsat\nunsat\n",
-          "mimetype": "text/plain"
-        }
-      ]
+      "id": "nWHF",
+      "code_hash": null,
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "iLit",
+      "code_hash": null,
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "ZHCJ",
+      "code_hash": null,
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "ROlb",
+      "code_hash": null,
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "qnkX",
+      "code_hash": null,
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "TqIu",
+      "code_hash": null,
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "Vxnm",
+      "code_hash": null,
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "DnEU",
+      "code_hash": null,
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "ulZA",
+      "code_hash": null,
+      "outputs": [],
+      "console": []
     },
     {
       "id": "XmCg",
@@ -375,135 +172,51 @@
       "console": []
     },
     {
-      "id": "ovLr",
-      "code_hash": "a730da9bbf16b97dddf28f1483cc9f15",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
-      "console": [
-        {
-          "type": "stream",
-          "name": "stdout",
-          "text": "base sat\nstop unsat\nerror unsat\nskip sat\nleft sat\nright sat\npc_ == init unsat\n[And(ULE(1, pc), UGE(6, pc)),\n Or(And(2 == pc,\n        5 == pc_,\n        y == 0,\n        x_ == x,\n        y_ == y,\n        z == z_,\n        a_ == a,\n        b_ == b),\n    And(2 == pc,\n        3 == pc_,\n        x_ == x,\n        y_ == y,\n        z_ == z,\n        a_ == a,\n        b_ == b,\n        y & 1 == 0,\n        y != 0),\n    And(2 == pc,\n        4 == pc_,\n        x_ == x,\n        y_ == y,\n        z_ == z,\n        a_ == a,\n        b_ == b,\n        y & 1 != 0,\n        y != 0),\n    And(3 == pc,\n        2 == pc_,\n        Not(Extract(8, 8, ZeroExt(1, x) + ZeroExt(1, x)) ==\n            1),\n        x_ == 2*x,\n        y_ == UDiv(y, 2),\n        z_ == z,\n        a_ == a,\n        b_ == b),\n    And(Not(Extract(8, 8, ZeroExt(1, z) + ZeroExt(1, x)) ==\n            1),\n        4 == pc,\n        2 == pc_,\n        x_ == x,\n        y_ == y - 1,\n        z_ == z + x,\n        a_ == a,\n        b_ == b),\n    And(3 == pc,\n        6 == pc_,\n        Extract(8, 8, ZeroExt(1, x) + ZeroExt(1, x)) == 1,\n        x_ == x,\n        y_ == y,\n        z_ == z,\n        a_ == a,\n        b_ == b),\n    And(4 == pc,\n        6 == pc_,\n        Extract(8, 8, ZeroExt(1, z) + ZeroExt(1, x)) == 1,\n        x_ == x,\n        y_ == y,\n        z_ == z,\n        a_ == a,\n        b_ == b))]\n",
-          "mimetype": "text/plain"
-        }
-      ]
-    },
-    {
-      "id": "DHIf",
-      "code_hash": "604833903a6facc30bc43784853429d5",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Predicado de Erro</strong></span>\n<hr /></span>"
-          }
-        }
-      ],
+      "id": "Pvdt",
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
-      "id": "CMzq",
-      "code_hash": "9b231566119573533f506eedd15dd362",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
-      "console": [
-        {
-          "type": "stream",
-          "name": "stdout",
-          "text": "sat\npc unsat\n[And(ULE(1, pc), UGE(6, pc)), 6 == pc]\n",
-          "mimetype": "text/plain"
-        }
-      ]
-    },
-    {
-      "id": "kGEs",
-      "code_hash": "4552980ca0b7c7c8b384905bef4bd383",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Model Check</strong></span>\n<hr /></span>"
-          }
-        }
-      ],
+      "id": "ZBYS",
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
-      "id": "tAKi",
-      "code_hash": "9715ff0dbe5edcc38f111a241e95460e",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
-      "console": [
-        {
-          "type": "stream",
-          "name": "stdout",
-          "text": "sat\n0 2 5 5 0\n1 4 5 5 0\n2 2 5 4 5\n3 3 5 4 5\n4 2 10 2 5\n5 3 10 2 5\n6 2 20 1 5\n7 4 20 1 5\n8 2 20 0 25\n9 5 20 0 25\nunsat\n",
-          "mimetype": "text/plain"
-        }
-      ]
-    },
-    {
-      "id": "sznF",
-      "code_hash": "f96e2c5536b7d93de8c94ecdb7a9c532",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>k-inducao k+1</strong></span>\n<hr /></span>"
-          }
-        }
-      ],
+      "id": "aLJB",
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
-      "id": "Zktk",
-      "code_hash": "c22f32133a10d136ecb72340f6929147",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
-      "console": [
-        {
-          "type": "stream",
-          "name": "stdout",
-          "text": "[3, 118, 1, 3, 11, 11]\n[2, 236, 0, 3, 11, 11]\n1 (unsat, sat)\n2 (unsat, unsat)\n3 (unsat, unsat)\n4 (unsat, unsat)\n5 (unsat, unsat)\n",
-          "mimetype": "text/plain"
-        }
-      ]
+      "id": "nHfw",
+      "code_hash": null,
+      "outputs": [],
+      "console": []
     },
     {
-      "id": "WkOe",
-      "code_hash": "8cc065ff528a47001d200d1de0115cf3",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Termina\u00e7\u00e3o</strong></span>\n<hr /></span>"
-          }
-        }
-      ],
+      "id": "xXTn",
+      "code_hash": null,
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "AjVT",
+      "code_hash": null,
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "pHFh",
+      "code_hash": null,
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "NCOB",
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
