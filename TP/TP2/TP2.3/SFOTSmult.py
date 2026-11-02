@@ -801,6 +801,7 @@ def _(mo):
 @app.cell
 def _(
     And,
+    Implies,
     Not,
     Or,
     Solver,
@@ -810,6 +811,8 @@ def _(
     ZeroExt,
     initcfa,
     n,
+    n_left,
+    n_right,
     newstate,
     perrcfa,
     sat,
@@ -826,48 +829,53 @@ def _(
     def dom(ppc):
         return And(ULE(1,ppc), UGE(6,ppc))
 
-    def kind(k):
-        knodes = [newstate(m, 'base') for m in range(k)]
+    def kind(k, prop, hyp=None, tag=''):
+        # prop(*estado) -> fórmula; hyp(*estado) -> fórmula extra usada só como hipótese no passo
+        lim = 2 ** (n // 2)
 
+        # ---------- caso base ----------
+        knodes = [newstate(m, tag + 'base') for m in range(k)]
         sbase = Solver()
         sbase.add(initcfa(*knodes[0]))
-        sbase.add(ULT(knodes[0][4], 2 ** (n//2)), ULT(knodes[0][5], 2 ** (n//2))) #alínea c
-
+        sbase.add(ULT(knodes[0][4], lim), ULT(knodes[0][5], lim))
         for t in range(k - 1):
             sbase.add(transcfa(knodes[t], knodes[t + 1]))
-    
-        #sbase.add(Or([perrcfa(*e) for e in knodes]))
-        sbase.add(Or([Not(stronginvariant(*e)) for e in knodes]))
+        sbase.add(Or([Not(prop(*e)) for e in knodes]))
         rbase = sbase.check()
 
-        knodesind = [newstate(u, 'ind') for u in range(k + 1)]
-
+        # ---------- passo indutivo ----------
+        kn = [newstate(u, tag + 'ind') for u in range(k + 1)]
         sind = Solver()
-        for e in knodesind:
-            sind.add(dom(e[0])) #escolhe aleatoriamente um estado (sujeito ao dominio pc e trans) para começar
-            sind.add(ULT(e[4], 2 ** (n//2)), ULT(e[5], 2 ** (n//2))) # alinea c
-
+        for e in kn:
+            sind.add(dom(e[0]))
+            sind.add(ULT(e[4], lim), ULT(e[5], lim))
         for j in range(k):
-            sind.add(transcfa(knodesind[j], knodesind[j + 1]))
-
-        lastind = knodesind[-1]
-        for state in knodesind[:-1]: # para o k-ésimo nodo
-            sind.add(stronginvariant(*state))
-            sind.add(Not(perrcfa(*state)))
-
-        sind.add(Or([Not(stronginvariant(*lastind))])) # para o k-ésimo nodo + 1
-        #sind.add(perrcfa(*lastind))
-        #sind.add(dom(lastind[0]))
+            sind.add(transcfa(kn[j], kn[j + 1]))
+        for e in kn[:-1]:
+            sind.add(prop(*e))
+            if hyp is not None:
+                sind.add(hyp(*e))
+        sind.add(Not(prop(*kn[-1])))
         rind = sind.check()
+
         if rind == sat:
             m = sind.model()
-            for e in knodesind:
+            for e in kn:
                 print([m.eval(c) for c in e])
 
         return rbase, rind
 
+    def safe(pc, x, y, z, a, b):          # erro nunca acessível
+        return Not(perrcfa(pc, x, y, z, a, b))
 
-    for o in range (1,6): print(o, kind(o))
+    def y_nonzero(pc, x, y, z, a, b):     # auxiliar da alínea 4
+        return And(Implies(pc == n_left,  y != 0),
+                   Implies(pc == n_right, y != 0))
+
+    for o in range(1, 6): print('alínea 2 ', o, kind(o, invariant))
+    for o in range(1, 6): print('strong   ', o, kind(o, stronginvariant))
+    for o in range(1, 6): print('alínea 3 ', o, kind(o, safe, hyp=stronginvariant))
+    for o in range(1, 6): print('y != 0   ', o, kind(o, y_nonzero))
     return (dom,)
 
 
