@@ -25,6 +25,24 @@ def _(mo):
     return
 
 
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    **Nodos e domínio do `pc`**
+
+    ---
+
+    O identificador do nodo é um `BitVec` de 3 bits, com uma constante por nodo do CFA:
+    `init=1`, `skip=2`, `left=3`, `right=4`, `stop=5`, `error=6`.
+    Os nomes só existem no código Python (prefixo `n_`); para o Z3 são apenas números.
+
+    Com 3 bits há 8 valores e só 6 são nodos válidos. O predicado `dom_pc` restringe o `pc` a $1 \le pc \le 6$,
+    com comparações **sem sinal** (`ULE`/`UGE`). O teste com `substitute` + `simplify` confirma que é `True` só para 1 a 6.
+    Mais à frente o `dom` é imposto a todos os estados do passo indutivo, para o solver não escolher `pc = 0` ou `7`.
+    """)
+    return
+
+
 @app.cell
 def _():
     #init dos nodos do CFA
@@ -84,7 +102,20 @@ def _():
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    **Variáveis Globais & Overflow check**
+    **Variáveis Globais**
+
+    O estado do SFOTS é o tuplo $(pc, x, y, z, a, b)$, por esta ordem em todas as funções.
+    `x, y, z, a, b` têm $n$ bits (aqui $n=8$, definido num só sítio) e `pc` tem 3.
+    `a` e `b` fazem parte do estado porque o invariante $x*y+z=a*b$ os usa; nunca mudam (frame condition).
+    As variáveis com sufixo `_` (`x_`, `pc_`, ...) representam o **estado seguinte**, necessário para escrever a relação de transição.
+
+    **Overflow check**
+
+    Em Z3 as operações sobre `BitVec` são módulo $2^n$ e nunca assinalam erro, ao contrário de uma ALU.
+    O overflow tem de ser detetado à mão: `ovfl_add(u, v)` faz a soma em $n+1$ bits (`ZeroExt(1, ...)`)
+    e verifica o bit extra (o "vai um"). Se for 1, o resultado verdadeiro não cabe em $n$ bits.
+    Usa-se `ovfl_add(x, x)` para $x \ll 1$ (ramo `left`) e `ovfl_add(z, x)` para $z + x$ (ramo `right`).
+    A função usa `u.size()`, por isso não depende da global `n`
 
     ---
     """)
@@ -117,6 +148,16 @@ def _(BitVec, BitVecs, Extract, ZeroExt):
 def _(mo):
     mo.md(r"""
     **Estado Inicial**
+
+    `initcfa` impõe $pc = skip \land x = a \land y = b \land z = 0$.
+
+    **Decisão de modelação:** o estado inicial do SFOTS é o estado do CFA *depois* de executar a ação do nodo `init`.
+    Esse nodo não tem antecedentes nem guarda e é determinístico, por isso a sua atribuição $x,y,z \leftarrow a,b,0$
+    pode ser absorvida no predicado inicial sem alterar os comportamentos. Consequências: o nodo `init` não aparece na
+    relação de transição, e o invariante $x*y+z=a*b$ vale desde o primeiro estado.
+
+    **Validação:** com `dom_pc` + `initcfa` o solver dá `sat`. Cada negação (`pc`, `x`, `y`, `z`), testada isoladamente
+    com `push()`/`pop()`, dá `unsat`, o que prova que a função impõe cada uma das quatro condições.
 
     ---
     """)
@@ -155,6 +196,12 @@ def _(And, Not, Solver, a, b, dom_pc, n_skip, pc, x, y, z):
 def _(mo):
     mo.md(r"""
     **Skip -> Stop**
+
+    Guarda: $pc = skip \land y = 0$. Estado seguinte: $pc' = stop$.
+    A seta do diagrama só tem uma **condição** ($y=0$), não uma atribuição, por isso nenhuma variável muda:
+    $x'=x,\ y'=y,\ z'=z$, e $a'=a,\ b'=b$ (frame condition, comum a todos os ramos).
+
+    Validação: base `sat`; negar `pc_`, qualquer variável de dados ou a guarda $y=0$ dá `unsat`.
 
     ---
     """)
@@ -216,6 +263,14 @@ def _(mo):
     mo.md(r"""
     **Skip -> Left**
 
+    Guarda: $pc = skip \land y \neq 0 \land even(y)$. Estado seguinte: $pc' = left$.
+    A paridade testa-se pelo bit menos significativo: $y$ é par sse $(y \,\&\, 1) = 0$.
+
+    No diagrama, a atribuição $x,y,z \leftarrow 2x, y/2, z$ está **dentro do nodo `left`**, não na seta.
+    Modelámos isso fazendo a ação na saída de `left` (ramo `left → skip`); por isso aqui os dados não mudam.
+    A condição $y \neq 0$ é necessária porque $0$ também é par, e sem ela `skip` deixava de ser determinístico
+    (`skip→stop` e `skip→left` aplicavam-se em simultâneo).
+
     ---
     """)
     return
@@ -276,6 +331,13 @@ def _(mo):
     mo.md(r"""
     **Skip -> Right**
 
+    Guarda: $pc = skip \land y \neq 0 \land odd(y)$, com $odd(y)$ dado por $(y \,\&\, 1) \neq 0$.
+    Estado seguinte: $pc' = right$, com os dados inalterados (a ação é aplicada em `right → skip`).
+
+    As guardas dos três ramos de `skip` ($y=0$; $y\neq0$ par; $y\neq0$ ímpar) são mutuamente exclusivas e cobrem
+    todos os casos, logo `skip` é determinístico. Nota: $y \neq 0$ é redundante com "ímpar", mas espelha o diagrama.
+    Por essa razão o teste "negar $y\neq0$" é fraco (já dava `unsat` pela paridade).
+
     ---
     """)
     return
@@ -334,6 +396,13 @@ def _(
 def _(mo):
     mo.md(r"""
     **Left -> Skip**
+
+    Guarda: $pc = left \land \neg overflow(x \ll 1)$, ou seja `Not(ovfl_add(x, x))`.
+    Ação: $x' = 2x,\ y' = y/2,\ z'=z$.
+
+    A divisão é **sem sinal** (`UDiv`), porque os dados são inteiros sem sinal; `/` em `BitVec` é com sinal.
+    Sem a guarda de overflow, o módulo $2^n$ deixava este ramo aplicar-se mesmo quando $2x$ não cabe em $n$ bits,
+    e o estado de erro nunca seria atingido (a alínea 3 passaria por vacuidade).
 
     ---
     """)
@@ -395,6 +464,13 @@ def _(mo):
     mo.md(r"""
     **Right -> Skip**
 
+    Guarda: $pc = right \land \neg overflow(z + x)$.
+    Ação: $x'=x,\ y'=y-1,\ z'=z+x$.
+
+    O overflow a controlar é o da soma $z+x$; $y-1$ não precisa de guarda, porque em `right` o $y$ é ímpar (logo $\ge 1$)
+    e a subtração não dá a volta. Esse facto só é garantido nos estados **alcançáveis**; num estado arbitrário
+    $y=0$ daria $255$. É por isso que a prova da alínea 4 precisa de um invariante auxiliar ($y \neq 0$ em `left`/`right`).
+
     ---
     """)
     return
@@ -455,6 +531,10 @@ def _(mo):
     mo.md(r"""
     **Left -> Error**
 
+    Guarda: $pc = left \land overflow(x \ll 1)$. Estado seguinte: $pc' = error$.
+    É o complemento exato de `left → skip`: o overflow tem **precedência** sobre o ramo normal, como pede o enunciado.
+    Os dados mantêm-se (a ação não chegou a completar-se). `error` não tem ramos de saída: é um estado terminal.
+
     ___
     """)
     return
@@ -513,6 +593,9 @@ def _(
 def _(mo):
     mo.md(r"""
     **Right -> Error**
+
+    Guarda: $pc = right \land overflow(z + x)$. Estado seguinte: $pc' = error$, com os dados inalterados.
+    Complemento de `right → skip`, e tal como `error` em `left`, é terminal.
 
     ---
     """)
@@ -574,6 +657,10 @@ def _(mo):
     mo.md(r"""
     **Teste Nodos Left & Right**
 
+    Em `left` e em `right` há dois ramos possíveis (normal e erro). Para o autómato ser determinístico nesses nodos,
+    os dois ramos não podem aplicar-se ao mesmo tempo. O teste adiciona `And(lefttoskip, lefttoerror)` (e o análogo para `right`)
+    e espera `unsat`: as guardas $\neg overflow$ e $overflow$ são contraditórias, logo nunca coexistem.
+
     ---
     """)
     return
@@ -618,7 +705,18 @@ def _(
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    **Trans**
+    **Relação de transição**
+
+    `transcfa(s, s')` é a disjunção dos **sete** ramos: `skip→stop`, `skip→left`, `skip→right`, `left→skip`,
+    `right→skip`, `left→error`, `right→error`. Cada ramo é um `And` com guarda, atualização do `pc`, dos dados e frame condition.
+    O ramo `init` não existe (ver estado inicial). Cada estado é um tuplo e as funções dos ramos recebem argumentos soltos,
+    por isso desempacota-se com `*`.
+
+    **Validações:**
+    - existe transição entre dois estados simbólicos (`sat`);
+    - `stop` e `error` não têm sucessor (`unsat`): são terminais;
+    - `skip`, `left` e `right` têm sucessor (`sat`);
+    - nenhum ramo leva a `init` (`unsat`).
 
     ---
     """)
@@ -699,6 +797,10 @@ def _(mo):
     mo.md(r"""
     **Predicado de Erro**
 
+    `perrcfa` diz que o estado é de erro: $pc = error$. É uma propriedade de **um** estado.
+    Não entra na `transcfa` (os ramos de overflow já levam $pc'=error$); serve para formular a segurança
+    (`Not(perrcfa)` em todos os estados) e para perguntar ao BMC se o erro é alcançável.
+
     ---
     """)
     return
@@ -733,6 +835,14 @@ def _(Not, Solver, a, b, dom_pc, n_error, pc, x, y, z):
 def _(mo):
     mo.md(r"""
     **Model Check**
+
+    Com $n=8$, $a=b=5$ e `STEPS = 10` verifica-se:
+    1. existe execução que termina em `stop` com $z=25=5\cdot5$ (`sat`): o modelo implementa a multiplicação,
+       seguindo o caminho `skip → right → skip → left → skip → left → skip → right → skip → stop`;
+    2. o erro não é alcançável (`unsat`): o maior valor que aparece é 25, longe de $2^8-1$.
+
+    **Limitação:** o MC só diz o que acontece até à profundidade testada. Para não passar por vacuidade, o erro foi confirmado
+    com $n=4$, $a=b=5$ e 7 estados (`sat`: $2\cdot 10 > 15$). A prova para qualquer profundidade é a k-indução.
 
     ---
     """)
@@ -791,7 +901,36 @@ def _(BitVec, BitVecs, Or, Solver, initcfa, n, n_stop, perrcfa, sat, transcfa):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    **k-inducao k+1**
+    **k-indução**
+
+    Sejam $I$ o estado inicial, $T$ a transição e $P$ a propriedade. `kind(k, prop)` faz duas verificações:
+
+    - **Caso base:** não existe sequência $s_0\ldots s_{k-1}$ com $I(s_0)$ e $T(s_i,s_{i+1})$ em que algum $P(s_i)$ falhe (`unsat`).
+    - **Passo indutivo:** não existe sequência de $k+1$ estados **arbitrários** (sem $I$, mas com `dom_pc`) ligados por $T$,
+      com $P$ nos primeiros $k$ e $\neg P$ no último (`unsat`).
+
+    Base `unsat` + passo `unsat` ⇒ $P$ vale em todos os estados alcançáveis. Se o passo der `sat` mas a base `unsat`, é inconclusivo:
+    o contra-exemplo pode partir de um estado inalcançável.
+
+    **Resultados** (todos com base `unsat`; o passo dá `sat` em $k=1$ e `unsat` para $k\ge 2$, exceto o último):
+
+    | Propriedade | Passo $k=1$ | Passo $k\ge2$ |
+    |---|---|---|
+    | $x*y+z=a*b$ (alínea 2) | `sat` | `unsat` |
+    | mesma igualdade em $2n$ bits (`stronginvariant`) | `sat` | `unsat` |
+    | erro nunca acessível (alínea 3) | `sat` | `unsat` |
+    | $y\neq0$ em `left`/`right` | `unsat` | `unsat` |
+
+    **Porque falha $k=1$:** os contra-exemplos são estados inalcançáveis. No invariante da alínea 2, `left` com $y$ ímpar:
+    $y/2$ perde o resto e $2x\cdot(y/2)=x(y-1)\ne xy$. Nas outras, `right` com $y=0$. Com $k=2$ o estado anterior é forçado
+    a ser `skip` com a guarda certa e esses estados desaparecem. Logo, o invariante é **2-indutivo**.
+
+    **Alínea 3 e invariante auxiliar:** a igualdade módulo $2^n$ não chega, porque o solver encontra estados com $a=b=0$ e
+    $x*y+z\equiv0 \pmod{2^n}$ mas $x$ enorme (overflow possível). A versão em $2n$ bits (`stronginvariant`) vale em inteiros;
+    com $a,b<2^{n/2}$ tem-se $a*b<2^n$, logo $2x\le a*b$ em `left` e $z+x\le a*b$ em `right`, e o overflow não ocorre.
+    O auxiliar foi provado à parte antes de ser usado como hipótese (`hyp`).
+
+    **Nota:** as restrições $a,b<2^{n/2}$ estão impostas em todos os casos, também na alínea 2, onde o enunciado não as exige.
 
     ---
     """)
@@ -882,7 +1021,23 @@ def _(
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    **Terminação**
+    **Terminação (alínea 4)**
+
+    K-indução só prova propriedades de segurança, por isso a terminação reduz-se a um argumento com **função variante**:
+    a medida é $y$, inteiro sem sinal, logo limitado inferiormente por 0.
+
+    `variant` é uma propriedade sobre **pares** de estados ligados por `transcfa`:
+    - em `skip`, $y' \le y$ (nunca aumenta);
+    - ao sair de `left` ou `right` para `skip`, com $y\neq0$, tem-se $y' < y$ ($y/2<y$ e $y-1<y$).
+
+    O solver confirma que `transcfa ∧ dom ∧ ¬variant` é `unsat`. A condição $y\neq0$ em `left`/`right` não é assumida:
+    foi provada por k-indução (`y_nonzero`, 1-indutiva), porque só se entra nesses nodos vindo de `skip` com $y\neq0$
+    e nenhum ramo de `skip` altera $y$. A guarda $pc'=skip$ exclui as transições de overflow, que não são voltas do ciclo.
+
+    **Conclusão:** $y$ nunca aumenta e desce estritamente em cada volta por `left` ou `right`; como não pode descer
+    indefinidamente, o ciclo só roda um número finito de vezes. Com $y=0$ o único ramo de `skip` é `skip → stop`.
+    Logo toda a execução chega a `stop` ou a `error`, ambos terminais, e `error` não ocorre quando $a,b<2^{n/2}$ (alínea 3).
+    A vivacidade decorre da boa fundação de $y$ (argumento fora do solver), apoiada nas propriedades de segurança verificadas.
 
     ---
     """)
