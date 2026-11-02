@@ -19,6 +19,19 @@
       "console": []
     },
     {
+      "id": "jBxi",
+      "code_hash": "79248a2cca8b38318bcf1fcf134f8e54",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Nodos e dom\u00ednio do <code>pc</code></strong></span>\n<hr />\n<span class=\"paragraph\">O identificador do nodo \u00e9 um <code>BitVec</code> de 3 bits, com uma constante por nodo do CFA:\n<code>init=1</code>, <code>skip=2</code>, <code>left=3</code>, <code>right=4</code>, <code>stop=5</code>, <code>error=6</code>.\nOs nomes s\u00f3 existem no c\u00f3digo Python (prefixo <code>n_</code>); para o Z3 s\u00e3o apenas n\u00fameros.</span>\n<span class=\"paragraph\">Com 3 bits h\u00e1 8 valores e s\u00f3 6 s\u00e3o nodos v\u00e1lidos. O predicado <code>dom_pc</code> restringe o <code>pc</code> a <marimo-tex class=\"arithmatex\">||(1 \\le pc \\le 6||)</marimo-tex>,\ncom compara\u00e7\u00f5es <strong>sem sinal</strong> (<code>ULE</code>/<code>UGE</code>). O teste com <code>substitute</code> + <code>simplify</code> confirma que \u00e9 <code>True</code> s\u00f3 para 1 a 6.\nMais \u00e0 frente o <code>dom</code> \u00e9 imposto a todos os estados do passo indutivo, para o solver n\u00e3o escolher <code>pc = 0</code> ou <code>7</code>.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
       "id": "MJUe",
       "code_hash": "f47efb2acdf55b50d3d7e8c734173d8d",
       "outputs": [
@@ -40,12 +53,12 @@
     },
     {
       "id": "vblA",
-      "code_hash": "eafb8b344a3fd21b82ce30cd1429bae1",
+      "code_hash": "f9d81d5a2b46c42c2e6fc3357d9fb17c",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Vari\u00e1veis Globais &amp; Overflow check</strong></span>\n<hr /></span>"
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Vari\u00e1veis Globais</strong></span>\n<span class=\"paragraph\">O estado do SFOTS \u00e9 o tuplo <marimo-tex class=\"arithmatex\">||((pc, x, y, z, a, b)||)</marimo-tex>, por esta ordem em todas as fun\u00e7\u00f5es.\n<code>x, y, z, a, b</code> t\u00eam <marimo-tex class=\"arithmatex\">||(n||)</marimo-tex> bits (aqui <marimo-tex class=\"arithmatex\">||(n=8||)</marimo-tex>, definido num s\u00f3 s\u00edtio) e <code>pc</code> tem 3.\n<code>a</code> e <code>b</code> fazem parte do estado porque o invariante <marimo-tex class=\"arithmatex\">||(x*y+z=a*b||)</marimo-tex> os usa; nunca mudam (frame condition).\nAs vari\u00e1veis com sufixo <code>_</code> (<code>x_</code>, <code>pc_</code>, ...) representam o <strong>estado seguinte</strong>, necess\u00e1rio para escrever a rela\u00e7\u00e3o de transi\u00e7\u00e3o.</span>\n<span class=\"paragraph\"><strong>Overflow check</strong></span>\n<span class=\"paragraph\">Em Z3 as opera\u00e7\u00f5es sobre <code>BitVec</code> s\u00e3o m\u00f3dulo <marimo-tex class=\"arithmatex\">||(2^n||)</marimo-tex> e nunca assinalam erro, ao contr\u00e1rio de uma ALU.\nO overflow tem de ser detetado \u00e0 m\u00e3o: <code>ovfl_add(u, v)</code> faz a soma em <marimo-tex class=\"arithmatex\">||(n+1||)</marimo-tex> bits (<code>ZeroExt(1, ...)</code>)\ne verifica o bit extra (o \"vai um\"). Se for 1, o resultado verdadeiro n\u00e3o cabe em <marimo-tex class=\"arithmatex\">||(n||)</marimo-tex> bits.\nUsa-se <code>ovfl_add(x, x)</code> para <marimo-tex class=\"arithmatex\">||(x \\ll 1||)</marimo-tex> (ramo <code>left</code>) e <code>ovfl_add(z, x)</code> para <marimo-tex class=\"arithmatex\">||(z + x||)</marimo-tex> (ramo <code>right</code>).\nA fun\u00e7\u00e3o usa <code>u.size()</code>, por isso n\u00e3o depende da global <code>n</code></span>\n<hr /></span>"
           }
         }
       ],
@@ -66,12 +79,12 @@
     },
     {
       "id": "lEQa",
-      "code_hash": "2013c385e172efb325744924d7ccc560",
+      "code_hash": "7df90fd1b19c4000075c1193ab3b4b7f",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Estado Inicial</strong></span>\n<hr /></span>"
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Estado Inicial</strong></span>\n<span class=\"paragraph\"><code>initcfa</code> imp\u00f5e <marimo-tex class=\"arithmatex\">||(pc = skip \\land x = a \\land y = b \\land z = 0||)</marimo-tex>.</span>\n<span class=\"paragraph\"><strong>Decis\u00e3o de modela\u00e7\u00e3o:</strong> o estado inicial do SFOTS \u00e9 o estado do CFA <em>depois</em> de executar a a\u00e7\u00e3o do nodo <code>init</code>.\nEsse nodo n\u00e3o tem antecedentes nem guarda e \u00e9 determin\u00edstico, por isso a sua atribui\u00e7\u00e3o <marimo-tex class=\"arithmatex\">||(x,y,z \\leftarrow a,b,0||)</marimo-tex>\npode ser absorvida no predicado inicial sem alterar os comportamentos. Consequ\u00eancias: o nodo <code>init</code> n\u00e3o aparece na\nrela\u00e7\u00e3o de transi\u00e7\u00e3o, e o invariante <marimo-tex class=\"arithmatex\">||(x*y+z=a*b||)</marimo-tex> vale desde o primeiro estado.</span>\n<span class=\"paragraph\"><strong>Valida\u00e7\u00e3o:</strong> com <code>dom_pc</code> + <code>initcfa</code> o solver d\u00e1 <code>sat</code>. Cada nega\u00e7\u00e3o (<code>pc</code>, <code>x</code>, <code>y</code>, <code>z</code>), testada isoladamente\ncom <code>push()</code>/<code>pop()</code>, d\u00e1 <code>unsat</code>, o que prova que a fun\u00e7\u00e3o imp\u00f5e cada uma das quatro condi\u00e7\u00f5es.</span>\n<hr /></span>"
           }
         }
       ],
@@ -99,12 +112,12 @@
     },
     {
       "id": "Xref",
-      "code_hash": "ee0fa1c0559c6918bab2a24b04ee04c5",
+      "code_hash": "939f6945eda33c9d8e38f5752e3ef115",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Skip -&gt; Stop</strong></span>\n<hr /></span>"
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Skip -&gt; Stop</strong></span>\n<span class=\"paragraph\">Guarda: <marimo-tex class=\"arithmatex\">||(pc = skip \\land y = 0||)</marimo-tex>. Estado seguinte: <marimo-tex class=\"arithmatex\">||(pc' = stop||)</marimo-tex>.\nA seta do diagrama s\u00f3 tem uma <strong>condi\u00e7\u00e3o</strong> (<marimo-tex class=\"arithmatex\">||(y=0||)</marimo-tex>), n\u00e3o uma atribui\u00e7\u00e3o, por isso nenhuma vari\u00e1vel muda:\n<marimo-tex class=\"arithmatex\">||(x'=x,\\ y'=y,\\ z'=z||)</marimo-tex>, e <marimo-tex class=\"arithmatex\">||(a'=a,\\ b'=b||)</marimo-tex> (frame condition, comum a todos os ramos).</span>\n<span class=\"paragraph\">Valida\u00e7\u00e3o: base <code>sat</code>; negar <code>pc_</code>, qualquer vari\u00e1vel de dados ou a guarda <marimo-tex class=\"arithmatex\">||(y=0||)</marimo-tex> d\u00e1 <code>unsat</code>.</span>\n<hr /></span>"
           }
         }
       ],
@@ -132,12 +145,12 @@
     },
     {
       "id": "BYtC",
-      "code_hash": "a41916a7a2762f209a26492a7e1ba04f",
+      "code_hash": "97031db3781d7b09b5358a58c4bd2482",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Skip -&gt; Left</strong></span>\n<hr /></span>"
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Skip -&gt; Left</strong></span>\n<span class=\"paragraph\">Guarda: <marimo-tex class=\"arithmatex\">||(pc = skip \\land y \\neq 0 \\land even(y)||)</marimo-tex>. Estado seguinte: <marimo-tex class=\"arithmatex\">||(pc' = left||)</marimo-tex>.\nA paridade testa-se pelo bit menos significativo: <marimo-tex class=\"arithmatex\">||(y||)</marimo-tex> \u00e9 par sse <marimo-tex class=\"arithmatex\">||((y \\,\\&amp;\\, 1) = 0||)</marimo-tex>.</span>\n<span class=\"paragraph\">No diagrama, a atribui\u00e7\u00e3o <marimo-tex class=\"arithmatex\">||(x,y,z \\leftarrow 2x, y/2, z||)</marimo-tex> est\u00e1 <strong>dentro do nodo <code>left</code></strong>, n\u00e3o na seta.\nModel\u00e1mos isso fazendo a a\u00e7\u00e3o na sa\u00edda de <code>left</code> (ramo <code>left \u2192 skip</code>); por isso aqui os dados n\u00e3o mudam.\nA condi\u00e7\u00e3o <marimo-tex class=\"arithmatex\">||(y \\neq 0||)</marimo-tex> \u00e9 necess\u00e1ria porque <marimo-tex class=\"arithmatex\">||(0||)</marimo-tex> tamb\u00e9m \u00e9 par, e sem ela <code>skip</code> deixava de ser determin\u00edstico\n(<code>skip\u2192stop</code> e <code>skip\u2192left</code> aplicavam-se em simult\u00e2neo).</span>\n<hr /></span>"
           }
         }
       ],
@@ -165,12 +178,12 @@
     },
     {
       "id": "Kclp",
-      "code_hash": "db2b3f3f97bbe622fb091cd3ff1dca7b",
+      "code_hash": "48f67a4f148cb3e60cc5db4b6e9161a0",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Skip -&gt; Right</strong></span>\n<hr /></span>"
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Skip -&gt; Right</strong></span>\n<span class=\"paragraph\">Guarda: <marimo-tex class=\"arithmatex\">||(pc = skip \\land y \\neq 0 \\land odd(y)||)</marimo-tex>, com <marimo-tex class=\"arithmatex\">||(odd(y)||)</marimo-tex> dado por <marimo-tex class=\"arithmatex\">||((y \\,\\&amp;\\, 1) \\neq 0||)</marimo-tex>.\nEstado seguinte: <marimo-tex class=\"arithmatex\">||(pc' = right||)</marimo-tex>, com os dados inalterados (a a\u00e7\u00e3o \u00e9 aplicada em <code>right \u2192 skip</code>).</span>\n<span class=\"paragraph\">As guardas dos tr\u00eas ramos de <code>skip</code> (<marimo-tex class=\"arithmatex\">||(y=0||)</marimo-tex>; <marimo-tex class=\"arithmatex\">||(y\\neq0||)</marimo-tex> par; <marimo-tex class=\"arithmatex\">||(y\\neq0||)</marimo-tex> \u00edmpar) s\u00e3o mutuamente exclusivas e cobrem\ntodos os casos, logo <code>skip</code> \u00e9 determin\u00edstico. Nota: <marimo-tex class=\"arithmatex\">||(y \\neq 0||)</marimo-tex> \u00e9 redundante com \"\u00edmpar\", mas espelha o diagrama.\nPor essa raz\u00e3o o teste \"negar <marimo-tex class=\"arithmatex\">||(y\\neq0||)</marimo-tex>\" \u00e9 fraco (j\u00e1 dava <code>unsat</code> pela paridade).</span>\n<hr /></span>"
           }
         }
       ],
@@ -198,12 +211,12 @@
     },
     {
       "id": "Hstk",
-      "code_hash": "156affba4a90cfdffa08dd4eba173a9c",
+      "code_hash": "a5d9aec45b6e09ab68c23d67d824fabc",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Left -&gt; Skip</strong></span>\n<hr /></span>"
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Left -&gt; Skip</strong></span>\n<span class=\"paragraph\">Guarda: <marimo-tex class=\"arithmatex\">||(pc = left \\land \\neg overflow(x \\ll 1)||)</marimo-tex>, ou seja <code>Not(ovfl_add(x, x))</code>.\nA\u00e7\u00e3o: <marimo-tex class=\"arithmatex\">||(x' = 2x,\\ y' = y/2,\\ z'=z||)</marimo-tex>.</span>\n<span class=\"paragraph\">A divis\u00e3o \u00e9 <strong>sem sinal</strong> (<code>UDiv</code>), porque os dados s\u00e3o inteiros sem sinal; <code>/</code> em <code>BitVec</code> \u00e9 com sinal.\nSem a guarda de overflow, o m\u00f3dulo <marimo-tex class=\"arithmatex\">||(2^n||)</marimo-tex> deixava este ramo aplicar-se mesmo quando <marimo-tex class=\"arithmatex\">||(2x||)</marimo-tex> n\u00e3o cabe em <marimo-tex class=\"arithmatex\">||(n||)</marimo-tex> bits,\ne o estado de erro nunca seria atingido (a al\u00ednea 3 passaria por vacuidade).</span>\n<hr /></span>"
           }
         }
       ],
@@ -231,12 +244,12 @@
     },
     {
       "id": "iLit",
-      "code_hash": "348d3c37f734ec7cc573bdbfa6a658ec",
+      "code_hash": "ce6bd98be56d331354e62428503f9c17",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Right -&gt; Skip</strong></span>\n<hr /></span>"
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Right -&gt; Skip</strong></span>\n<span class=\"paragraph\">Guarda: <marimo-tex class=\"arithmatex\">||(pc = right \\land \\neg overflow(z + x)||)</marimo-tex>.\nA\u00e7\u00e3o: <marimo-tex class=\"arithmatex\">||(x'=x,\\ y'=y-1,\\ z'=z+x||)</marimo-tex>.</span>\n<span class=\"paragraph\">O overflow a controlar \u00e9 o da soma <marimo-tex class=\"arithmatex\">||(z+x||)</marimo-tex>; <marimo-tex class=\"arithmatex\">||(y-1||)</marimo-tex> n\u00e3o precisa de guarda, porque em <code>right</code> o <marimo-tex class=\"arithmatex\">||(y||)</marimo-tex> \u00e9 \u00edmpar (logo <marimo-tex class=\"arithmatex\">||(\\ge 1||)</marimo-tex>)\ne a subtra\u00e7\u00e3o n\u00e3o d\u00e1 a volta. Esse facto s\u00f3 \u00e9 garantido nos estados <strong>alcan\u00e7\u00e1veis</strong>; num estado arbitr\u00e1rio\n<marimo-tex class=\"arithmatex\">||(y=0||)</marimo-tex> daria <marimo-tex class=\"arithmatex\">||(255||)</marimo-tex>. \u00c9 por isso que a prova da al\u00ednea 4 precisa de um invariante auxiliar (<marimo-tex class=\"arithmatex\">||(y \\neq 0||)</marimo-tex> em <code>left</code>/<code>right</code>).</span>\n<hr /></span>"
           }
         }
       ],
@@ -264,12 +277,12 @@
     },
     {
       "id": "ROlb",
-      "code_hash": "335deb795817740047b6197a945c499c",
+      "code_hash": "d46da6ddeb9c27bccefdc1ca49f13b61",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Left -&gt; Error</strong></span>\n<hr /></span>"
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Left -&gt; Error</strong></span>\n<span class=\"paragraph\">Guarda: <marimo-tex class=\"arithmatex\">||(pc = left \\land overflow(x \\ll 1)||)</marimo-tex>. Estado seguinte: <marimo-tex class=\"arithmatex\">||(pc' = error||)</marimo-tex>.\n\u00c9 o complemento exato de <code>left \u2192 skip</code>: o overflow tem <strong>preced\u00eancia</strong> sobre o ramo normal, como pede o enunciado.\nOs dados mant\u00eam-se (a a\u00e7\u00e3o n\u00e3o chegou a completar-se). <code>error</code> n\u00e3o tem ramos de sa\u00edda: \u00e9 um estado terminal.</span>\n<hr /></span>"
           }
         }
       ],
@@ -297,12 +310,12 @@
     },
     {
       "id": "TqIu",
-      "code_hash": "134bb13abe2b8f88773d83bb56f7538a",
+      "code_hash": "81c0bc85c8f0c2aaacefc1c21b252058",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Right -&gt; Error</strong></span>\n<hr /></span>"
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Right -&gt; Error</strong></span>\n<span class=\"paragraph\">Guarda: <marimo-tex class=\"arithmatex\">||(pc = right \\land overflow(z + x)||)</marimo-tex>. Estado seguinte: <marimo-tex class=\"arithmatex\">||(pc' = error||)</marimo-tex>, com os dados inalterados.\nComplemento de <code>right \u2192 skip</code>, e tal como <code>error</code> em <code>left</code>, \u00e9 terminal.</span>\n<hr /></span>"
           }
         }
       ],
@@ -330,12 +343,12 @@
     },
     {
       "id": "DnEU",
-      "code_hash": "7867c64973a479d959fd232f840a51cf",
+      "code_hash": "d36d5d541707636231d24308df6e1248",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Teste Nodos Left &amp; Right</strong></span>\n<hr /></span>"
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Teste Nodos Left &amp; Right</strong></span>\n<span class=\"paragraph\">Em <code>left</code> e em <code>right</code> h\u00e1 dois ramos poss\u00edveis (normal e erro). Para o aut\u00f3mato ser determin\u00edstico nesses nodos,\nos dois ramos n\u00e3o podem aplicar-se ao mesmo tempo. O teste adiciona <code>And(lefttoskip, lefttoerror)</code> (e o an\u00e1logo para <code>right</code>)\ne espera <code>unsat</code>: as guardas <marimo-tex class=\"arithmatex\">||(\\neg overflow||)</marimo-tex> e <marimo-tex class=\"arithmatex\">||(overflow||)</marimo-tex> s\u00e3o contradit\u00f3rias, logo nunca coexistem.</span>\n<hr /></span>"
           }
         }
       ],
@@ -363,12 +376,12 @@
     },
     {
       "id": "XmCg",
-      "code_hash": "4f00bbb97264b1b4c39477d18b885a4e",
+      "code_hash": "3a1dac0740b261201b4bd4b04dcc98fc",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Trans</strong></span>\n<hr /></span>"
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Rela\u00e7\u00e3o de transi\u00e7\u00e3o</strong></span>\n<span class=\"paragraph\"><code>transcfa(s, s')</code> \u00e9 a disjun\u00e7\u00e3o dos <strong>sete</strong> ramos: <code>skip\u2192stop</code>, <code>skip\u2192left</code>, <code>skip\u2192right</code>, <code>left\u2192skip</code>,\n<code>right\u2192skip</code>, <code>left\u2192error</code>, <code>right\u2192error</code>. Cada ramo \u00e9 um <code>And</code> com guarda, atualiza\u00e7\u00e3o do <code>pc</code>, dos dados e frame condition.\nO ramo <code>init</code> n\u00e3o existe (ver estado inicial). Cada estado \u00e9 um tuplo e as fun\u00e7\u00f5es dos ramos recebem argumentos soltos,\npor isso desempacota-se com <code>*</code>.</span>\n<span class=\"paragraph\"><strong>Valida\u00e7\u00f5es:</strong></span>\n<ul>\n<li>existe transi\u00e7\u00e3o entre dois estados simb\u00f3licos (<code>sat</code>);</li>\n<li><code>stop</code> e <code>error</code> n\u00e3o t\u00eam sucessor (<code>unsat</code>): s\u00e3o terminais;</li>\n<li><code>skip</code>, <code>left</code> e <code>right</code> t\u00eam sucessor (<code>sat</code>);</li>\n<li>nenhum ramo leva a <code>init</code> (<code>unsat</code>).</li>\n</ul>\n<hr /></span>"
           }
         }
       ],
@@ -396,12 +409,12 @@
     },
     {
       "id": "ZBYS",
-      "code_hash": "c8d7a7178ef8b8710f1248e682f37532",
+      "code_hash": "f119b98fb762aa0489a779adfa08fb3a",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Predicado de Erro</strong></span>\n<hr /></span>"
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Predicado de Erro</strong></span>\n<span class=\"paragraph\"><code>perrcfa</code> diz que o estado \u00e9 de erro: <marimo-tex class=\"arithmatex\">||(pc = error||)</marimo-tex>. \u00c9 uma propriedade de <strong>um</strong> estado.\nN\u00e3o entra na <code>transcfa</code> (os ramos de overflow j\u00e1 levam <marimo-tex class=\"arithmatex\">||(pc'=error||)</marimo-tex>); serve para formular a seguran\u00e7a\n(<code>Not(perrcfa)</code> em todos os estados) e para perguntar ao BMC se o erro \u00e9 alcan\u00e7\u00e1vel.</span>\n<hr /></span>"
           }
         }
       ],
@@ -429,12 +442,12 @@
     },
     {
       "id": "nHfw",
-      "code_hash": "9fe54dc462a4decce2ea1a435500cccb",
+      "code_hash": "0dca5482cbbb5af5ff4ce1dd89d405a4",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Model Check</strong></span>\n<hr /></span>"
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Model Check</strong></span>\n<span class=\"paragraph\">Com <marimo-tex class=\"arithmatex\">||(n=8||)</marimo-tex>, <marimo-tex class=\"arithmatex\">||(a=b=5||)</marimo-tex> e <code>STEPS = 10</code> verifica-se:</span>\n<ol>\n<li>existe execu\u00e7\u00e3o que termina em <code>stop</code> com <marimo-tex class=\"arithmatex\">||(z=25=5\\cdot5||)</marimo-tex> (<code>sat</code>): o modelo implementa a multiplica\u00e7\u00e3o,\n   seguindo o caminho <code>skip \u2192 right \u2192 skip \u2192 left \u2192 skip \u2192 left \u2192 skip \u2192 right \u2192 skip \u2192 stop</code>;</li>\n<li>o erro n\u00e3o \u00e9 alcan\u00e7\u00e1vel (<code>unsat</code>): o maior valor que aparece \u00e9 25, longe de <marimo-tex class=\"arithmatex\">||(2^8-1||)</marimo-tex>.</li>\n</ol>\n<span class=\"paragraph\"><strong>Limita\u00e7\u00e3o:</strong> o MC s\u00f3 diz o que acontece at\u00e9 \u00e0 profundidade testada. Para n\u00e3o passar por vacuidade, o erro foi confirmado\ncom <marimo-tex class=\"arithmatex\">||(n=4||)</marimo-tex>, <marimo-tex class=\"arithmatex\">||(a=b=5||)</marimo-tex> e 7 estados (<code>sat</code>: <marimo-tex class=\"arithmatex\">||(2\\cdot 10 &gt; 15||)</marimo-tex>). A prova para qualquer profundidade \u00e9 a k-indu\u00e7\u00e3o.</span>\n<hr /></span>"
           }
         }
       ],
@@ -462,12 +475,12 @@
     },
     {
       "id": "AjVT",
-      "code_hash": "f96e2c5536b7d93de8c94ecdb7a9c532",
+      "code_hash": "75d86998786308c3016af66ef4de7bb8",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>k-inducao k+1</strong></span>\n<hr /></span>"
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>k-indu\u00e7\u00e3o</strong></span>\n<span class=\"paragraph\">Sejam <marimo-tex class=\"arithmatex\">||(I||)</marimo-tex> o estado inicial, <marimo-tex class=\"arithmatex\">||(T||)</marimo-tex> a transi\u00e7\u00e3o e <marimo-tex class=\"arithmatex\">||(P||)</marimo-tex> a propriedade. <code>kind(k, prop)</code> faz duas verifica\u00e7\u00f5es:</span>\n<ul>\n<li><strong>Caso base:</strong> n\u00e3o existe sequ\u00eancia <marimo-tex class=\"arithmatex\">||(s_0\\ldots s_{k-1}||)</marimo-tex> com <marimo-tex class=\"arithmatex\">||(I(s_0)||)</marimo-tex> e <marimo-tex class=\"arithmatex\">||(T(s_i,s_{i+1})||)</marimo-tex> em que algum <marimo-tex class=\"arithmatex\">||(P(s_i)||)</marimo-tex> falhe (<code>unsat</code>).</li>\n<li><strong>Passo indutivo:</strong> n\u00e3o existe sequ\u00eancia de <marimo-tex class=\"arithmatex\">||(k+1||)</marimo-tex> estados <strong>arbitr\u00e1rios</strong> (sem <marimo-tex class=\"arithmatex\">||(I||)</marimo-tex>, mas com <code>dom_pc</code>) ligados por <marimo-tex class=\"arithmatex\">||(T||)</marimo-tex>,\n  com <marimo-tex class=\"arithmatex\">||(P||)</marimo-tex> nos primeiros <marimo-tex class=\"arithmatex\">||(k||)</marimo-tex> e <marimo-tex class=\"arithmatex\">||(\\neg P||)</marimo-tex> no \u00faltimo (<code>unsat</code>).</li>\n</ul>\n<span class=\"paragraph\">Base <code>unsat</code> + passo <code>unsat</code> \u21d2 <marimo-tex class=\"arithmatex\">||(P||)</marimo-tex> vale em todos os estados alcan\u00e7\u00e1veis. Se o passo der <code>sat</code> mas a base <code>unsat</code>, \u00e9 inconclusivo:\no contra-exemplo pode partir de um estado inalcan\u00e7\u00e1vel.</span>\n<span class=\"paragraph\"><strong>Resultados</strong> (todos com base <code>unsat</code>; o passo d\u00e1 <code>sat</code> em <marimo-tex class=\"arithmatex\">||(k=1||)</marimo-tex> e <code>unsat</code> para <marimo-tex class=\"arithmatex\">||(k\\ge 2||)</marimo-tex>, exceto o \u00faltimo):</span>\n<table>\n<thead>\n<tr>\n<th>Propriedade</th>\n<th>Passo <marimo-tex class=\"arithmatex\">||(k=1||)</marimo-tex></th>\n<th>Passo <marimo-tex class=\"arithmatex\">||(k\\ge2||)</marimo-tex></th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><marimo-tex class=\"arithmatex\">||(x*y+z=a*b||)</marimo-tex> (al\u00ednea 2)</td>\n<td><code>sat</code></td>\n<td><code>unsat</code></td>\n</tr>\n<tr>\n<td>mesma igualdade em <marimo-tex class=\"arithmatex\">||(2n||)</marimo-tex> bits (<code>stronginvariant</code>)</td>\n<td><code>sat</code></td>\n<td><code>unsat</code></td>\n</tr>\n<tr>\n<td>erro nunca acess\u00edvel (al\u00ednea 3)</td>\n<td><code>sat</code></td>\n<td><code>unsat</code></td>\n</tr>\n<tr>\n<td><marimo-tex class=\"arithmatex\">||(y\\neq0||)</marimo-tex> em <code>left</code>/<code>right</code></td>\n<td><code>unsat</code></td>\n<td><code>unsat</code></td>\n</tr>\n</tbody>\n</table>\n<span class=\"paragraph\"><strong>Porque falha <marimo-tex class=\"arithmatex\">||(k=1||)</marimo-tex>:</strong> os contra-exemplos s\u00e3o estados inalcan\u00e7\u00e1veis. No invariante da al\u00ednea 2, <code>left</code> com <marimo-tex class=\"arithmatex\">||(y||)</marimo-tex> \u00edmpar:\n<marimo-tex class=\"arithmatex\">||(y/2||)</marimo-tex> perde o resto e <marimo-tex class=\"arithmatex\">||(2x\\cdot(y/2)=x(y-1)\\ne xy||)</marimo-tex>. Nas outras, <code>right</code> com <marimo-tex class=\"arithmatex\">||(y=0||)</marimo-tex>. Com <marimo-tex class=\"arithmatex\">||(k=2||)</marimo-tex> o estado anterior \u00e9 for\u00e7ado\na ser <code>skip</code> com a guarda certa e esses estados desaparecem. Logo, o invariante \u00e9 <strong>2-indutivo</strong>.</span>\n<span class=\"paragraph\"><strong>Al\u00ednea 3 e invariante auxiliar:</strong> a igualdade m\u00f3dulo <marimo-tex class=\"arithmatex\">||(2^n||)</marimo-tex> n\u00e3o chega, porque o solver encontra estados com <marimo-tex class=\"arithmatex\">||(a=b=0||)</marimo-tex> e\n<marimo-tex class=\"arithmatex\">||(x*y+z\\equiv0 \\pmod{2^n}||)</marimo-tex> mas <marimo-tex class=\"arithmatex\">||(x||)</marimo-tex> enorme (overflow poss\u00edvel). A vers\u00e3o em <marimo-tex class=\"arithmatex\">||(2n||)</marimo-tex> bits (<code>stronginvariant</code>) vale em inteiros;\ncom <marimo-tex class=\"arithmatex\">||(a,b&lt;2^{n/2}||)</marimo-tex> tem-se <marimo-tex class=\"arithmatex\">||(a*b&lt;2^n||)</marimo-tex>, logo <marimo-tex class=\"arithmatex\">||(2x\\le a*b||)</marimo-tex> em <code>left</code> e <marimo-tex class=\"arithmatex\">||(z+x\\le a*b||)</marimo-tex> em <code>right</code>, e o overflow n\u00e3o ocorre.\nO auxiliar foi provado \u00e0 parte antes de ser usado como hip\u00f3tese (<code>hyp</code>).</span>\n<span class=\"paragraph\"><strong>Nota:</strong> as restri\u00e7\u00f5es <marimo-tex class=\"arithmatex\">||(a,b&lt;2^{n/2}||)</marimo-tex> est\u00e3o impostas em todos os casos, tamb\u00e9m na al\u00ednea 2, onde o enunciado n\u00e3o as exige.</span>\n<hr /></span>"
           }
         }
       ],
@@ -495,12 +508,12 @@
     },
     {
       "id": "NCOB",
-      "code_hash": "ff4a4041d9a1993d6232aca2b92a7579",
+      "code_hash": "ba4819c3d611ad6c77a90c7a1fb89b8a",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Termina\u00e7\u00e3o</strong></span>\n<hr /></span>"
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Termina\u00e7\u00e3o (al\u00ednea 4)</strong></span>\n<span class=\"paragraph\">K-indu\u00e7\u00e3o s\u00f3 prova propriedades de seguran\u00e7a, por isso a termina\u00e7\u00e3o reduz-se a um argumento com <strong>fun\u00e7\u00e3o variante</strong>:\na medida \u00e9 <marimo-tex class=\"arithmatex\">||(y||)</marimo-tex>, inteiro sem sinal, logo limitado inferiormente por 0.</span>\n<span class=\"paragraph\"><code>variant</code> \u00e9 uma propriedade sobre <strong>pares</strong> de estados ligados por <code>transcfa</code>:</span>\n<ul>\n<li>em <code>skip</code>, <marimo-tex class=\"arithmatex\">||(y' \\le y||)</marimo-tex> (nunca aumenta);</li>\n<li>ao sair de <code>left</code> ou <code>right</code> para <code>skip</code>, com <marimo-tex class=\"arithmatex\">||(y\\neq0||)</marimo-tex>, tem-se <marimo-tex class=\"arithmatex\">||(y' &lt; y||)</marimo-tex> (<marimo-tex class=\"arithmatex\">||(y/2&lt;y||)</marimo-tex> e <marimo-tex class=\"arithmatex\">||(y-1&lt;y||)</marimo-tex>).</li>\n</ul>\n<span class=\"paragraph\">O solver confirma que <code>transcfa \u2227 dom \u2227 \u00acvariant</code> \u00e9 <code>unsat</code>. A condi\u00e7\u00e3o <marimo-tex class=\"arithmatex\">||(y\\neq0||)</marimo-tex> em <code>left</code>/<code>right</code> n\u00e3o \u00e9 assumida:\nfoi provada por k-indu\u00e7\u00e3o (<code>y_nonzero</code>, 1-indutiva), porque s\u00f3 se entra nesses nodos vindo de <code>skip</code> com <marimo-tex class=\"arithmatex\">||(y\\neq0||)</marimo-tex>\ne nenhum ramo de <code>skip</code> altera <marimo-tex class=\"arithmatex\">||(y||)</marimo-tex>. A guarda <marimo-tex class=\"arithmatex\">||(pc'=skip||)</marimo-tex> exclui as transi\u00e7\u00f5es de overflow, que n\u00e3o s\u00e3o voltas do ciclo.</span>\n<span class=\"paragraph\"><strong>Conclus\u00e3o:</strong> <marimo-tex class=\"arithmatex\">||(y||)</marimo-tex> nunca aumenta e desce estritamente em cada volta por <code>left</code> ou <code>right</code>; como n\u00e3o pode descer\nindefinidamente, o ciclo s\u00f3 roda um n\u00famero finito de vezes. Com <marimo-tex class=\"arithmatex\">||(y=0||)</marimo-tex> o \u00fanico ramo de <code>skip</code> \u00e9 <code>skip \u2192 stop</code>.\nLogo toda a execu\u00e7\u00e3o chega a <code>stop</code> ou a <code>error</code>, ambos terminais, e <code>error</code> n\u00e3o ocorre quando <marimo-tex class=\"arithmatex\">||(a,b&lt;2^{n/2}||)</marimo-tex> (al\u00ednea 3).\nA vivacidade decorre da boa funda\u00e7\u00e3o de <marimo-tex class=\"arithmatex\">||(y||)</marimo-tex> (argumento fora do solver), apoiada nas propriedades de seguran\u00e7a verificadas.</span>\n<hr /></span>"
           }
         }
       ],
