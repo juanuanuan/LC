@@ -124,7 +124,7 @@ def _(mo):
 @app.cell
 def _(BitVec, BitVecs, Extract, ZeroExt):
     #n-bits
-    n = 8
+    n = 4
 
     #declaração de x,y,z
     x, y, z = BitVecs('x y z', n)
@@ -184,7 +184,6 @@ def _(And, Not, Solver, a, b, dom_pc, n_skip, pc, x, y, z):
         inits.pop()
 
     print(inits.assertions()) # só dom_pc e initcf
-
 
     return (initcfa,)
 
@@ -250,7 +249,6 @@ def _(
         stss.pop()
 
     print(stss.assertions()) 
-
     return (skiptostop,)
 
 
@@ -926,7 +924,7 @@ def _(mo):
     com $a,b<2^{n/2}$ tem-se $a*b<2^n$, logo $2x\le a*b$ em `left` e $z+x\le a*b$ em `right`, e o overflow não ocorre.
     O auxiliar foi provado à parte antes de ser usado como hipótese (`hyp`).
 
-    **Nota:** as restrições $a,b<2^{n/2}$ estão impostas em todos os casos, também na alínea 2, onde o enunciado não as exige.
+    **Nota:** as restrições $a,b<2^{n/2}$ estão impostas em todos os casos, exceto na alínea b). Adicionalmente, foi testada a variabilidade de n: 10, 8 e 4 (demorando aproximadamente `9`, `2` e `0.5` segundos, respetivamente). Para esses números, obtivemos os resultados esperados.  Já para 16 bits, o algoritmo correu por tempo indefinido **(para k = 6)**, não sendo possível tirar conclusões sobre eventuais resultados.
 
     ---
     """)
@@ -1032,6 +1030,8 @@ def _(mo):
     foi provada por k-indução (`y_nonzero`, 1-indutiva), porque só se entra nesses nodos vindo de `skip` com $y\neq0$
     e nenhum ramo de `skip` altera $y$. A guarda $pc'=skip$ exclui as transições de overflow, que não são voltas do ciclo.
 
+    Nota: ver resultado acima para y != 0 (k-indução)
+
 
     ---
     """)
@@ -1091,7 +1091,7 @@ def _(mo):
     mo.md(r"""
     **Conclusão:** $y$ nunca aumenta e desce estritamente em cada volta por `left` ou `right`; como não pode descer
     indefinidamente, o ciclo só roda um número finito de vezes. Com $y=0$ o único ramo de `skip` é `skip → stop`.
-    Logo toda a execução chega a `stop` ou a `error`, ambos terminais, e `error` não ocorre quando $a,b<2^{n/2}$ (alínea 3).
+    Logo toda a execução chega a `stop` ou a `error`, ambos terminais, e `error` não ocorre quando $a,b<2^{n/2}$ (alínea c)).
     A vivacidade decorre da boa fundação de $y$ (argumento fora do solver), apoiada nas propriedades de segurança verificadas.
 
     ---
@@ -1105,7 +1105,7 @@ def _(mo):
     ## Utilização de LLM's
         1. Esclarecimento de dúvidas
         2. Análise de código e a sua eventual correção
-        3. Aconcelhamento do workflow a seguir.
+        3. Aconselhamento do workflow a seguir.
 
     ####O modelo de AI utilizado foi o `Claude`
     ---
