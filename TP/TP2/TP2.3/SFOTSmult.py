@@ -446,6 +446,7 @@ def _(
         ("pc_", Not(pc_ == n_skip)),
         ("x_",  Not(x_ == 2 * x)),
         ("y_",  Not(y_ == UDiv(y, 2))),
+        ("ovfl", (ovfl_add(x,x))), # Not(Not(ovfl_add(x,x)))
         ("z_",  Not(z_ == z)),
         ("a_",  Not(a_ == a)),
         ("b_",  Not(b_ == b))   
@@ -851,10 +852,10 @@ def _(mo):
 
 @app.cell
 def _(BitVec, BitVecs, Or, Solver, initcfa, n, n_stop, perrcfa, sat, transcfa):
-    STEPS = 10   # num de estados na sequência (6 estados = 5 transições)
+    STEPS = 10   # num de estados na sequência (10 estados)
 
     # indexação das variáveis por estado/nodo
-    def newstate(i, str):
+    def newstate(i, tag = ''):
         pc_i = BitVec(f'pc_{i}', 3)
         x_i, y_i, z_i, a_i, b_i = BitVecs(f'x_{i} y_{i} z_{i} a_{i} b_{i}', n)
         return (pc_i, x_i, y_i, z_i, a_i, b_i)
@@ -968,15 +969,16 @@ def _(
     def dom(ppc):
         return And(ULE(1,ppc), UGE(6,ppc))
 
-    def kind(k, prop, hyp=None, tag=''):
-        # prop(*estado) -> fórmula; hyp(*estado) -> fórmula extra usada só como hipótese no passo
-        lim = 2 ** (n // 2)
+    def kind(k, prop, hyp=None, tag='', restrict=True):
+        # prop(*estado) -> proposição a ser validada; hyp(*estado) -> hipótese assumida como verdade para todo o k
+        lim = 2 ** (n // 2) #restrição alínea c
 
         # ---------- caso base ----------
         knodes = [newstate(m, tag + 'base') for m in range(k)]
         sbase = Solver()
         sbase.add(initcfa(*knodes[0]))
-        sbase.add(ULT(knodes[0][4], lim), ULT(knodes[0][5], lim))
+        if restrict:
+            sbase.add(ULT(knodes[0][4], lim), ULT(knodes[0][5], lim))
         for t in range(k - 1):
             sbase.add(transcfa(knodes[t], knodes[t + 1]))
         sbase.add(Or([Not(prop(*e)) for e in knodes]))
@@ -987,7 +989,8 @@ def _(
         sind = Solver()
         for e in kn:
             sind.add(dom(e[0]))
-            sind.add(ULT(e[4], lim), ULT(e[5], lim))
+            if restrict:
+                sind.add(ULT(e[4], lim), ULT(e[5], lim))
         for j in range(k):
             sind.add(transcfa(kn[j], kn[j + 1]))
         for e in kn[:-1]:
@@ -1011,9 +1014,9 @@ def _(
         return And(Implies(pc == n_left,  y != 0),
                    Implies(pc == n_right, y != 0))
 
-    for o in range(1, 6): print('alínea 2 ', o, kind(o, invariant))
+    for o in range(1, 6): print('b) unrestricted', o, kind(o, invariant, restrict=False))
     for o in range(1, 6): print('strong   ', o, kind(o, stronginvariant))
-    for o in range(1, 6): print('alínea 3 ', o, kind(o, safe, hyp=stronginvariant))
+    for o in range(1, 6): print('c) ', o, kind(o, safe, hyp=stronginvariant))
     for o in range(1, 6): print('y != 0   ', o, kind(o, y_nonzero))
     return (dom,)
 
@@ -1034,10 +1037,6 @@ def _(mo):
     foi provada por k-indução (`y_nonzero`, 1-indutiva), porque só se entra nesses nodos vindo de `skip` com $y\neq0$
     e nenhum ramo de `skip` altera $y$. A guarda $pc'=skip$ exclui as transições de overflow, que não são voltas do ciclo.
 
-    **Conclusão:** $y$ nunca aumenta e desce estritamente em cada volta por `left` ou `right`; como não pode descer
-    indefinidamente, o ciclo só roda um número finito de vezes. Com $y=0$ o único ramo de `skip` é `skip → stop`.
-    Logo toda a execução chega a `stop` ou a `error`, ambos terminais, e `error` não ocorre quando $a,b<2^{n/2}$ (alínea 3).
-    A vivacidade decorre da boa fundação de $y$ (argumento fora do solver), apoiada nas propriedades de segurança verificadas.
 
     ---
     """)
@@ -1089,6 +1088,19 @@ def _(
 
     if sv.check() == sat:
         print(sv.model()) 
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    **Conclusão:** $y$ nunca aumenta e desce estritamente em cada volta por `left` ou `right`; como não pode descer
+    indefinidamente, o ciclo só roda um número finito de vezes. Com $y=0$ o único ramo de `skip` é `skip → stop`.
+    Logo toda a execução chega a `stop` ou a `error`, ambos terminais, e `error` não ocorre quando $a,b<2^{n/2}$ (alínea 3).
+    A vivacidade decorre da boa fundação de $y$ (argumento fora do solver), apoiada nas propriedades de segurança verificadas.
+
+    ---
+    """)
     return
 
 
