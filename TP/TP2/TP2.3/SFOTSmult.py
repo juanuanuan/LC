@@ -71,7 +71,6 @@ def _():
     s = Solver()
     s.add(dom_pc)
     print(s.check())
-
     return (
         And,
         BitVec,
@@ -140,7 +139,6 @@ def _(BitVec, BitVecs, Extract, ZeroExt):
         sum  = ZeroExt(1, u) + ZeroExt(1,v)
         return Extract(n_bits, n_bits, sum) == 1
     #def ovfl_dbl(u, v):
-
     return a, a_, b, b_, n, ovfl_add, pc_, x, x_, y, y_, z, z_
 
 
@@ -186,7 +184,6 @@ def _(And, Not, Solver, a, b, dom_pc, n_skip, pc, x, y, z):
         inits.pop()
 
     print(inits.assertions()) # só dom_pc e initcf
-
 
 
     return (initcfa,)
@@ -253,7 +250,6 @@ def _(
         stss.pop()
 
     print(stss.assertions()) 
-
 
     return (skiptostop,)
 
@@ -789,7 +785,6 @@ def _(
     t.pop()
 
     print(t.assertions())               # só dom_pc e transcfa
-
     return (transcfa,)
 
 
@@ -1098,6 +1093,19 @@ def _(mo):
     indefinidamente, o ciclo só roda um número finito de vezes. Com $y=0$ o único ramo de `skip` é `skip → stop`.
     Logo toda a execução chega a `stop` ou a `error`, ambos terminais, e `error` não ocorre quando $a,b<2^{n/2}$ (alínea 3).
     A vivacidade decorre da boa fundação de $y$ (argumento fora do solver), apoiada nas propriedades de segurança verificadas.
+
+    ---
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ## Utilização de LLM's
+        1. Esclarecimento de dúvidas
+        2. Análise de código e a sua eventual correção
+        3. Aconcelhamento do workflow a seguir.
 
     ---
     """)
