@@ -1,0 +1,373 @@
+{
+  "version": "1",
+  "metadata": {
+    "marimo_version": "0.25.0",
+    "script_metadata_hash": null
+  },
+  "cells": [
+    {
+      "id": "Hbol",
+      "code_hash": "1d0db38904205bec4d6f6f6a1f6cec3e",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "MJUe",
+      "code_hash": "6a45364b5351c7ee67176bde0ae16d37",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h1 id=\"exercicio-1-game-of-life-como-maquina-de-estados-finita\">Exerc\u00edcio 1 \u2014 Game of Life como M\u00e1quina de Estados Finita</h1>\n<span class=\"paragraph\">Neste trabalho modela-se uma variante do Conway's Game of Life, com espa\u00e7o de estados finito, como uma m\u00e1quina de estados finita (FSM). A FSM \u00e9 codificada em l\u00f3gica com o pySMT (solver Z3).</span>\n<span class=\"paragraph\">Depois verificam-se duas propriedades com Bounded Model Checking (BMC):</span>\n<ol>\n<li>nunca se alcan\u00e7a o estado de erro;</li>\n<li>nenhuma c\u00e9lula normal est\u00e1 permanentemente morta ou permanentemente viva.</li>\n</ol></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "vblA",
+      "code_hash": "7d3079e89601e26487c0ab7ac10fd8b6",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "bkHC",
+      "code_hash": "2f02d8c0c82a559b5e37cc74679db991",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"1-parametros\">1. Par\u00e2metros</h2>\n<ul>\n<li>N \u2014 dimens\u00e3o da grelha de c\u00e9lulas normais. O enunciado exige N &gt; 16, por isso usamos N = 17.</li>\n<li>MODO \u2014 escolhe a rela\u00e7\u00e3o de transi\u00e7\u00e3o da FSM:<ul>\n<li>\"assincrono\" (al\u00ednea a.i): em cada transi\u00e7\u00e3o, uma e s\u00f3 uma c\u00e9lula normal muda de estado;</li>\n<li>\"sincrono\" (al\u00ednea a.ii): em cada transi\u00e7\u00e3o, todas as c\u00e9lulas normais transitam em simult\u00e2neo.</li>\n</ul>\n</li>\n<li>K \u2014 n\u00famero m\u00e1ximo de transi\u00e7\u00f5es exploradas pelo BMC.</li>\n<li>SEMENTE \u2014 semente usada para sortear as c\u00e9lulas iniciais na simula\u00e7\u00e3o.</li>\n</ul>\n<span class=\"paragraph\">Ao mudar o valor de MODO, o marimo volta a correr automaticamente todas as c\u00e9lulas que dependem dele.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "lEQa",
+      "code_hash": "527f8c4b31393db4c0d448f1179db1a0",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "PKri",
+      "code_hash": "ef2c577f4d522f0edb8ffc76bf03025a",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"2-organizacao-da-grelha\">2. Organiza\u00e7\u00e3o da grelha</h2>\n<span class=\"paragraph\">Usamos \u00edndices (i,j) <marimo-tex class=\"arithmatex\">||(\\in||)</marimo-tex> {0,...,N+1}^2, ou seja, uma grelha de (N+2) x (N+2) com tr\u00eas tipos de c\u00e9lulas:</span>\n<table>\n<thead>\n<tr>\n<th>Tipo</th>\n<th>Condi\u00e7\u00e3o</th>\n<th>Quantidade</th>\n<th>Comportamento</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>normais</td>\n<td>1 &lt;= i,j &lt;= N</td>\n<td>N^2</td>\n<td>evoluem segundo a regra B3/S23</td>\n</tr>\n<tr>\n<td>iniciais</td>\n<td>min(i,j)=0 e max(i,j) &lt;= N</td>\n<td>2N+1</td>\n<td>constantes, sorteadas no estado inicial</td>\n</tr>\n<tr>\n<td>finais</td>\n<td>max(i,j)=N+1</td>\n<td>2N+3</td>\n<td>sempre mortas</td>\n</tr>\n</tbody>\n</table>\n<span class=\"paragraph\">As celulas (i_0,j_0) e (i_1,j_1) s\u00e3o vizinhas sse max(|i_0-i_1|,|j_0-j_1|)=1, ou seja, cada celula tem como vizinhas as 8 c\u00e9lulas \u00e0 sua volta.</span>\n<span class=\"paragraph\">Uma celula normal tem sempre os seus 8 vizinhos dentro desta grelha alargada, por isso n\u00e3o h\u00e1 casos especiais nas bordas. Os assert confirmam as quantidades dadas no enunciado.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Xref",
+      "code_hash": "9858dcfb7bac5c0ed78c0951c08e653f",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "SFPL",
+      "code_hash": "2ba114961524d03005ea83fab6f105a5",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"3-estado-da-fsm-declare\">3. Estado da FSM \u2014 declare</h2>\n<span class=\"paragraph\">Cada estado s_k de um tra\u00e7o \u00e9 um dicion\u00e1rio que associa a cada c\u00e9lula uma f\u00f3rmula booleana (True = viva, False = morta):</span>\n<ul>\n<li>c\u00e9lula normal ou inicial -&gt; uma vari\u00e1vel c_i_j_k;</li>\n<li>c\u00e9lula final -&gt; a constante False, que n\u00e3o precisa de vari\u00e1vel porque nunca muda.</li>\n</ul>\n<span class=\"paragraph\">As c\u00e9lulas iniciais fazem parte do estado (t\u00eam uma vari\u00e1vel em cada s_k), mas a rela\u00e7\u00e3o de transi\u00e7\u00e3o obriga-as a manter o seu valor.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "BYtC",
+      "code_hash": "fab0685e75a911e7d535633094c85914",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "RGSE",
+      "code_hash": "31ce3a7bb23c709eaaf2f05d282bccfb",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"4-estado-inicial-init\">4. Estado inicial \u2014 init</h2>\n<marimo-tex class=\"arithmatex\">||[init(s) \\;\\equiv\\; \\bigwedge_{1\\le i,j\\le 3} s_{i,j} \\;\\;\\wedge \\bigwedge_{(i,j)\\ \\text{normal},\\ \\max(i,j)&gt;3} \\neg\\, s_{i,j}||]</marimo-tex><span class=\"paragraph\">As c\u00e9lulas iniciais n\u00e3o s\u00e3o restringidas. Ficam livres, e o solver pode escolher qualquer combina\u00e7\u00e3o de valores.</span>\n<span class=\"paragraph\">Isto modela o sorteio aleat\u00f3rio. Cada c\u00e9lula inicial est\u00e1 viva com probabilidade 1/2, por isso todas as 2^{2N+1} configura\u00e7\u00f5es poss\u00edveis t\u00eam probabilidade positiva. Uma propriedade s\u00f3 \u00e9 v\u00e1lida se for v\u00e1lida para todas elas.</span>\n<span class=\"paragraph\">Para a simula\u00e7\u00e3o, fronteira_aleatoria fixa um sorteio concreto, gerado com a semente SEMENTE.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Kclp",
+      "code_hash": "2d112ee25fc8cc22904739105e2a7b27",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "emfo",
+      "code_hash": "b3046c8cd9f0bdeab091b89217c454d1",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"5-regra-b3s23\">5. Regra B3/S23</h2>\n<span class=\"paragraph\">Seja n o n\u00famero de vizinhos vivos da c\u00e9lula (i,j) no estado s. O valor seguinte da c\u00e9lula \u00e9:</span>\n<marimo-tex class=\"arithmatex\">||[regra(s,i,j) \\;\\equiv\\; (n = 3) \\;\\vee\\; (s_{i,j} \\wedge n = 2)||]</marimo-tex><ul>\n<li>nasce se est\u00e1 morta e tem n=3;</li>\n<li>sobrevive se est\u00e1 viva e tem n <marimo-tex class=\"arithmatex\">||(\\in||)</marimo-tex> {2,3};</li>\n<li>caso contr\u00e1rio, morre ou continua morta.</li>\n</ul>\n<span class=\"paragraph\">O n \u00e9 calculado em aritm\u00e9tica inteira, somando Ite(viva, 1, 0) para cada vizinho.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Hstk",
+      "code_hash": "b4cec0c60d8f47ac33b46ea3691e7103",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "nWHF",
+      "code_hash": "7738cffa96572814aa0f0e759cc1998c",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"6-relacao-de-transicao-trans\">6. Rela\u00e7\u00e3o de transi\u00e7\u00e3o \u2014 trans</h2>\n<span class=\"paragraph\">Em ambos os modos, as c\u00e9lulas iniciais mant\u00eam o seu valor. As c\u00e9lulas finais s\u00e3o constantes por constru\u00e7\u00e3o.</span>\n<span class=\"paragraph\">Modo s\u00edncrono (a.ii) \u2014 todas as c\u00e9lulas normais atualizam ao mesmo tempo:</span>\n<marimo-tex class=\"arithmatex\">||[\\bigwedge_{(i,j)\\ \\text{normal}} \\big(s'_{i,j} \\leftrightarrow regra(s,i,j)\\big)||]</marimo-tex><span class=\"paragraph\">Modo ass\u00edncrono (a.i) \u2014 uma e so uma celula normal muda, e essa mudan\u00e7a respeita a regra:</span>\n<marimo-tex class=\"arithmatex\">||[ExactlyOne_{(i,j)}\\big(s'_{i,j} \\neq s_{i,j}\\big) \\;\\wedge\\; \\bigwedge_{(i,j)} \\big(s'_{i,j}\\neq s_{i,j} \\rightarrow (s'_{i,j} \\leftrightarrow regra(s,i,j))\\big)||]</marimo-tex><span class=\"paragraph\">Decis\u00e3o de modela\u00e7\u00e3o: estados est\u00e1veis. Um estado \u00e9 est\u00e1vel quando todas as c\u00e9lulas j\u00e1 satisfazem a regra. Nesse caso nenhuma c\u00e9lula pode mudar, e no modo ass\u00edncrono n\u00e3o haveria nenhuma transi\u00e7\u00e3o poss\u00edvel (deadlock).</span>\n<span class=\"paragraph\">Para que todas as execu\u00e7\u00f5es sejam infinitas, permitimos que o sistema fique no mesmo estado, mas apenas nos estados est\u00e1veis. No modo s\u00edncrono isto acontece naturalmente, porque um estado est\u00e1vel transita para si pr\u00f3prio.</span>\n<span class=\"paragraph\">A fun\u00e7\u00e3o trans escolhe a rela\u00e7\u00e3o de transi\u00e7\u00e3o conforme o valor do par\u00e2metro MODO.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "iLit",
+      "code_hash": "82cfd2376c97e450285e14d61ff21ac0",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "ZHCJ",
+      "code_hash": "7abb42fbf4188188dd6cca485158fbc1",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"7-visualizacao-e-simulacao\">7. Visualiza\u00e7\u00e3o e simula\u00e7\u00e3o</h2>\n<span class=\"paragraph\">Para visualizar os tra\u00e7os, desenhamos a grelha de (N+2) x(N+2) em texto:</span>\n<table>\n<thead>\n<tr>\n<th>S\u00edmbolo</th>\n<th>Significado</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td># / .</td>\n<td>c\u00e9lula normal viva / morta</td>\n</tr>\n<tr>\n<td>o / -</td>\n<td>c\u00e9lula inicial viva / morta</td>\n</tr>\n<tr>\n<td>x</td>\n<td>c\u00e9lula final (sempre morta)</td>\n</tr>\n</tbody>\n</table>\n<ul>\n<li>gera_traco(k, extra) pede ao solver um tra\u00e7o com k transi\u00e7\u00f5es a partir do estado inicial. O argumento extra \u00e9 uma condi\u00e7\u00e3o opcional sobre s_0, como o sorteio das c\u00e9lulas iniciais.</li>\n<li>mostra_traco desenha os estados lado a lado.</li>\n</ul></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "ROlb",
+      "code_hash": "d89cb0bcab8ba7f12660dcca4d43f338",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "qnkX",
+      "code_hash": "e9750d7ea2f83c9fc3b3319d1208ecea",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">Simula\u00e7\u00e3o (sincrono) com as celulas iniciais sorteadas (semente 2026)</span></span><div style='display: flex;flex: 1;flex-direction: row;justify-content: flex-start;align-items: normal;flex-wrap: wrap;gap: 0.5rem'><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>s0</strong>\n<div class=\"language-text codehilite\"><pre><span></span><code>o---oo--------o-o-x\no###..............x\n-###..............x\n-###..............x\n-.................x\no.................x\no.................x\n-.................x\n-.................x\n-.................x\n-.................x\n-.................x\no.................x\no.................x\n-.................x\no.................x\no.................x\n-.................x\nxxxxxxxxxxxxxxxxxxx\n</code></pre></div></span></span><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>s1</strong>\n<div class=\"language-text codehilite\"><pre><span></span><code>o---oo--------o-o-x\no.................x\n-...#.............x\n-#.#..............x\n-##...............x\no.................x\no.................x\n-.................x\n-.................x\n-.................x\n-.................x\n-.................x\no.................x\no.................x\n-.................x\no.................x\no.................x\n-.................x\nxxxxxxxxxxxxxxxxxxx\n</code></pre></div></span></span><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>s2</strong>\n<div class=\"language-text codehilite\"><pre><span></span><code>o---oo--------o-o-x\no...##............x\n-.................x\n-#.#..............x\n-##...............x\no.................x\no.................x\n-.................x\n-.................x\n-.................x\n-.................x\n-.................x\no.................x\no.................x\n-.................x\no.................x\no.................x\n-.................x\nxxxxxxxxxxxxxxxxxxx\n</code></pre></div></span></span><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>s3</strong>\n<div class=\"language-text codehilite\"><pre><span></span><code>o---oo--------o-o-x\no...##............x\n-...#.............x\n-#................x\n-##...............x\no.................x\no.................x\n-.................x\n-.................x\n-.................x\n-.................x\n-.................x\no.................x\no.................x\n-.................x\no.................x\no.................x\n-.................x\nxxxxxxxxxxxxxxxxxxx\n</code></pre></div></span></span><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>s4</strong>\n<div class=\"language-text codehilite\"><pre><span></span><code>o---oo--------o-o-x\no..#..............x\n-...##............x\n-##...............x\n-##...............x\no.................x\no.................x\n-.................x\n-.................x\n-.................x\n-.................x\n-.................x\no.................x\no.................x\n-.................x\no.................x\no.................x\n-.................x\nxxxxxxxxxxxxxxxxxxx\n</code></pre></div></span></span><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>s5</strong>\n<div class=\"language-text codehilite\"><pre><span></span><code>o---oo--------o-o-x\no..#..............x\n-####.............x\n-###..............x\n-.#...............x\no.................x\no.................x\n-.................x\n-.................x\n-.................x\n-.................x\n-.................x\no.................x\no.................x\n-.................x\no.................x\no.................x\n-.................x\nxxxxxxxxxxxxxxxxxxx\n</code></pre></div></span></span><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>s6</strong>\n<div class=\"language-text codehilite\"><pre><span></span><code>o---oo--------o-o-x\no....#............x\n-...#.............x\n-...#.............x\n-.##..............x\no#................x\no.................x\n-.................x\n-.................x\n-.................x\n-.................x\n-.................x\no.................x\no.................x\n-.................x\no.................x\no.................x\n-.................x\nxxxxxxxxxxxxxxxxxxx\n</code></pre></div></span></span></div></div>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "TqIu",
+      "code_hash": "efcf39c518ab2fe38d694776d992d5d5",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"8-propriedade-bi-nunca-se-alcanca-o-estado-de-erro\">8. Propriedade b.i \u2014 \"Nunca se alcan\u00e7a o estado de erro\"</h2>\n<span class=\"paragraph\">O estado de erro \u00e9 aquele em que todas as c\u00e9lulas normais est\u00e3o mortas:</span>\n<marimo-tex class=\"arithmatex\">||[erro(s) \\;\\equiv\\; \\bigwedge_{(i,j)\\ \\text{normal}} \\neg\\, s_{i,j}||]</marimo-tex><span class=\"paragraph\">A propriedade \u00e9 o invariante <marimo-tex class=\"arithmatex\">||(\\mathbf{G}\\,\\neg erro||)</marimo-tex>. Para a verificar usamos BMC: para k = 0, 1, ... , K, perguntamos ao solver se existe um tra\u00e7o <marimo-tex class=\"arithmatex\">||(s_0 \\to s_1 \\to \\dots \\to s_k||)</marimo-tex> com init(s_0) e erro(s_k).</span>\n<ul>\n<li>Se existir, esse tra\u00e7o \u00e9 um contra-exemplo e a propriedade \u00e9 falsa.</li>\n<li>Se n\u00e3o existir at\u00e9 K, s\u00f3 sabemos que n\u00e3o h\u00e1 erro nos primeiros K passos. Para provar a propriedade seria preciso, por exemplo, k-indu\u00e7\u00e3o.</li>\n</ul>\n<span class=\"paragraph\">A implementa\u00e7\u00e3o \u00e9 incremental. O mesmo solver vai acumulando as transi\u00e7\u00f5es, e a condi\u00e7\u00e3o erro(s_k) \u00e9 passada como <em>assumption</em>, ficando ativa apenas nessa chamada. Assim, o primeiro <marimo-tex class=\"arithmatex\">||(k||)</marimo-tex> encontrado \u00e9 o contra-exemplo mais curto.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Vxnm",
+      "code_hash": "44b2e9daec4de262cc122b1ab1e6f264",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "DnEU",
+      "code_hash": "d73ab9f740e880383a6eec10e47bfb64",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">Contra-exemplo (sincrono): o estado de erro \u00e9 alcan\u00e7ado ao fim de 3 transi\u00e7\u00f5es.</span></span><div style='display: flex;flex: 1;flex-direction: row;justify-content: flex-start;align-items: normal;flex-wrap: wrap;gap: 0.5rem'><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>s0</strong>\n<div class=\"language-text codehilite\"><pre><span></span><code>o-o---oo-oo---o-o-x\no###..............x\no###..............x\n-###..............x\n-.................x\n-.................x\no.................x\no.................x\n-.................x\no.................x\n-.................x\n-.................x\n-.................x\n-.................x\n-.................x\n-.................x\n-.................x\no.................x\nxxxxxxxxxxxxxxxxxxx\n</code></pre></div></span></span><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>s1</strong>\n<div class=\"language-text codehilite\"><pre><span></span><code>o-o---oo-oo---o-o-x\no.................x\no...#.............x\n-..#..............x\n-.#...............x\n-.................x\no.................x\no.................x\n-.................x\no.................x\n-.................x\n-.................x\n-.................x\n-.................x\n-.................x\n-.................x\n-.................x\no.................x\nxxxxxxxxxxxxxxxxxxx\n</code></pre></div></span></span><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>s2</strong>\n<div class=\"language-text codehilite\"><pre><span></span><code>o-o---oo-oo---o-o-x\no.................x\no.................x\n-..#..............x\n-.................x\n-.................x\no.................x\no.................x\n-.................x\no.................x\n-.................x\n-.................x\n-.................x\n-.................x\n-.................x\n-.................x\n-.................x\no.................x\nxxxxxxxxxxxxxxxxxxx\n</code></pre></div></span></span><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>s3</strong>\n<div class=\"language-text codehilite\"><pre><span></span><code>o-o---oo-oo---o-o-x\no.................x\no.................x\n-.................x\n-.................x\n-.................x\no.................x\no.................x\n-.................x\no.................x\n-.................x\n-.................x\n-.................x\n-.................x\n-.................x\n-.................x\n-.................x\no.................x\nxxxxxxxxxxxxxxxxxxx\n</code></pre></div></span></span></div></div>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "ulZA",
+      "code_hash": "7a63821159da9caf9942fad10a65bddc",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"discussao-de-bi\">Discuss\u00e3o de b.i</h3>\n<span class=\"paragraph\">A propriedade \u00e9 falsa nos dois modos:</span>\n<ul>\n<li>S\u00edncrono: existe uma configura\u00e7\u00e3o das c\u00e9lulas iniciais para a qual todas as c\u00e9lulas normais morrem ao fim de 3 transi\u00e7\u00f5es.</li>\n<li>Ass\u00edncrono: o erro \u00e9 alcan\u00e7ado ao fim de 9 transi\u00e7\u00f5es. Este \u00e9 o m\u00ednimo poss\u00edvel: h\u00e1 9 c\u00e9lulas vivas no in\u00edcio e, em cada transi\u00e7\u00e3o, s\u00f3 uma c\u00e9lula muda, por isso s\u00e3o precisas pelo menos 9 mortes.</li>\n</ul>\n<span class=\"paragraph\">Como o BMC encontrou contra-exemplos, n\u00e3o \u00e9 necess\u00e1rio tentar uma prova por k-indu\u00e7\u00e3o.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "ecfG",
+      "code_hash": "56bceb602fa9971bcc3ae35f95f7b715",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"9-propriedade-bii-nenhuma-celula-normal-esta-permanentemente-morta-ou-permanentemente-viva\">9. Propriedade b.ii \u2014 \"Nenhuma c\u00e9lula normal est\u00e1 permanentemente morta ou permanentemente viva\"</h2>\n<span class=\"paragraph\">Interpreta\u00e7\u00e3o. Numa execu\u00e7\u00e3o (infinita), uma c\u00e9lula <marimo-tex class=\"arithmatex\">||(c||)</marimo-tex> est\u00e1:</span>\n<ul>\n<li>permanentemente morta se est\u00e1 morta em todos os estados (<marimo-tex class=\"arithmatex\">||(\\mathbf{G}\\,\\neg c||)</marimo-tex>);</li>\n<li>permanentemente viva se est\u00e1 viva em todos os estados (<marimo-tex class=\"arithmatex\">||(\\mathbf{G}\\,c||)</marimo-tex>).</li>\n</ul>\n<span class=\"paragraph\">A propriedade afirma que nenhuma execu\u00e7\u00e3o tem uma c\u00e9lula assim. Para a refutar, basta encontrar uma execu\u00e7\u00e3o e uma c\u00e9lula com valor constante.</span>\n<span class=\"paragraph\">Contra-exemplos em la\u00e7o (lasso). Como o espa\u00e7o de estados \u00e9 finito, qualquer execu\u00e7\u00e3o infinita acaba por repetir um estado. Por isso, um contra-exemplo pode ser apresentado como um tra\u00e7o finito que volta a um estado anterior:</span>\n<marimo-tex class=\"arithmatex\">||[init(s_0) \\;\\wedge\\; \\bigwedge_{t&lt;k} trans(s_t,s_{t+1}) \\;\\wedge\\; \\bigvee_{l&lt;k} (s_k = s_l) \\;\\wedge\\; \\bigwedge_{t\\le k} (s_t)_c = v||]</marimo-tex><span class=\"paragraph\">O tra\u00e7o infinito <marimo-tex class=\"arithmatex\">||(s_0 ... s_{l-1}\\,(s_l ... s_{k-1})^\\omega||)</marimo-tex> \u00e9 uma execu\u00e7\u00e3o v\u00e1lida em que a c\u00e9lula c tem sempre o valor v. Procuramos estes la\u00e7os com BMC, aumentando k at\u00e9 K.</span>\n<span class=\"paragraph\">Um contra-exemplo para a leitura \"sempre\" (<marimo-tex class=\"arithmatex\">||(\\mathbf{G}||)</marimo-tex>) \u00e9 tamb\u00e9m um contra-exemplo para a leitura mais fraca \"a partir de certo momento\" (<marimo-tex class=\"arithmatex\">||(\\mathbf{F}\\mathbf{G}||)</marimo-tex>). Por isso, os resultados valem para as duas interpreta\u00e7\u00f5es.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Pvdt",
+      "code_hash": "62abf36e2bb51d0b37a928d493362032",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "ZBYS",
+      "code_hash": "7605607d3968ea1176b9c0a86ba2a3d1",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">Contra-exemplo (sincrono): a c\u00e9lula (17, 17) est\u00e1 sempre morta. Como s3 = s1, o tra\u00e7o repete s1\u2026s2 para sempre.</span></span><div style='display: flex;flex: 1;flex-direction: row;justify-content: flex-start;align-items: normal;flex-wrap: wrap;gap: 0.5rem'><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>s0</strong>\n<div class=\"language-text codehilite\"><pre><span></span><code>oo---oo-oo------o-x\no###..............x\n-###..............x\n-###..............x\n-.................x\no.................x\no.................x\n-.................x\no.................x\no.................x\n-.................x\no.................x\no.................x\n-.................x\no.................x\n-.................x\n-.................x\n-.................x\nxxxxxxxxxxxxxxxxxxx\n</code></pre></div></span></span><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>s1</strong>\n<div class=\"language-text codehilite\"><pre><span></span><code>oo---oo-oo------o-x\no..##.............x\n-...#.............x\n-#.#..............x\n-##...............x\no.................x\no.................x\n-.................x\no.................x\no.................x\n-.................x\no.................x\no.................x\n-.................x\no.................x\n-.................x\n-.................x\n-.................x\nxxxxxxxxxxxxxxxxxxx\n</code></pre></div></span></span><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>s2</strong>\n<div class=\"language-text codehilite\"><pre><span></span><code>oo---oo-oo------o-x\no#.##.............x\n-.#.#.............x\n-#.#..............x\n-##...............x\no.................x\no.................x\n-.................x\no.................x\no.................x\n-.................x\no.................x\no.................x\n-.................x\no.................x\n-.................x\n-.................x\n-.................x\nxxxxxxxxxxxxxxxxxxx\n</code></pre></div></span></span><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>s3</strong>\n<div class=\"language-text codehilite\"><pre><span></span><code>oo---oo-oo------o-x\no..##.............x\n-...#.............x\n-#.#..............x\n-##...............x\no.................x\no.................x\n-.................x\no.................x\no.................x\n-.................x\no.................x\no.................x\n-.................x\no.................x\n-.................x\n-.................x\n-.................x\nxxxxxxxxxxxxxxxxxxx\n</code></pre></div></span></span></div></div>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "aLJB",
+      "code_hash": "66cf3e760cdd767c513d73661ef38395",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">Contra-exemplo (sincrono): a c\u00e9lula (3, 3) est\u00e1 sempre viva. Como s3 = s1, o tra\u00e7o repete s1\u2026s2 para sempre.</span></span><div style='display: flex;flex: 1;flex-direction: row;justify-content: flex-start;align-items: normal;flex-wrap: wrap;gap: 0.5rem'><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>s0</strong>\n<div class=\"language-text codehilite\"><pre><span></span><code>oo---oo-oo--oo-o--x\no###..............x\n-###..............x\n-###..............x\n-.................x\no.................x\no.................x\n-.................x\n-.................x\no.................x\no.................x\n-.................x\no.................x\n-.................x\no.................x\no.................x\n-.................x\no.................x\nxxxxxxxxxxxxxxxxxxx\n</code></pre></div></span></span><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>s1</strong>\n<div class=\"language-text codehilite\"><pre><span></span><code>oo---oo-oo--oo-o--x\no..##.............x\n-...#.............x\n-#.#..............x\n-##...............x\no.................x\no.................x\n-.................x\n-.................x\no.................x\no.................x\n-.................x\no.................x\n-.................x\no.................x\no.................x\n-.................x\no.................x\nxxxxxxxxxxxxxxxxxxx\n</code></pre></div></span></span><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>s2</strong>\n<div class=\"language-text codehilite\"><pre><span></span><code>oo---oo-oo--oo-o--x\no#.##.............x\n-.#.#.............x\n-#.#..............x\n-##...............x\no.................x\no.................x\n-.................x\n-.................x\no.................x\no.................x\n-.................x\no.................x\n-.................x\no.................x\no.................x\n-.................x\no.................x\nxxxxxxxxxxxxxxxxxxx\n</code></pre></div></span></span><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>s3</strong>\n<div class=\"language-text codehilite\"><pre><span></span><code>oo---oo-oo--oo-o--x\no..##.............x\n-...#.............x\n-#.#..............x\n-##...............x\no.................x\no.................x\n-.................x\n-.................x\no.................x\no.................x\n-.................x\no.................x\n-.................x\no.................x\no.................x\n-.................x\no.................x\nxxxxxxxxxxxxxxxxxxx\n</code></pre></div></span></span></div></div>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "nHfw",
+      "code_hash": "9f4026719dd75715d86e37ddb699c299",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"discussao-de-bii\">Discuss\u00e3o de b.ii</h3>\n<span class=\"paragraph\">A propriedade \u00e9 falsa nos dois modos:</span>\n<ul>\n<li>Permanentemente morta: a c\u00e9lula (N,N), no canto oposto ao bloco inicial, nunca chega a nascer. Por exemplo, a atividade pode extinguir-se ou estabilizar perto do canto (1,1) antes de l\u00e1 chegar.</li>\n<li>Permanentemente viva: a c\u00e9lula (3,3), que come\u00e7a viva, pode manter-se viva para sempre numa configura\u00e7\u00e3o que estabiliza.</li>\n</ul>\n<span class=\"paragraph\">No modo ass\u00edncrono, os la\u00e7os terminam num estado est\u00e1vel (o sistema fica parado nesse estado, como decidido na sec\u00e7\u00e3o 6).</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "xXTn",
+      "code_hash": "dd8bae5292b3fba248920f0c15125b6f",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"10-conclusoes\">10. Conclus\u00f5es</h2>\n<table>\n<thead>\n<tr>\n<th>Propriedade</th>\n<th>Modo s\u00edncrono</th>\n<th>Modo ass\u00edncrono</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>b.i \u2014 nunca se alcan\u00e7a o erro</td>\n<td>Falsa (erro em 3 transi\u00e7\u00f5es)</td>\n<td>Falsa (erro em 9 transi\u00e7\u00f5es)</td>\n</tr>\n<tr>\n<td>b.ii \u2014 nenhuma c\u00e9lula sempre morta</td>\n<td>Falsa (c\u00e9lula (N,N))</td>\n<td>Falsa (c\u00e9lula (N,N))</td>\n</tr>\n<tr>\n<td>b.ii \u2014 nenhuma c\u00e9lula sempre viva</td>\n<td>Falsa (c\u00e9lula (3,3))</td>\n<td>Falsa (c\u00e9lula (3,3))</td>\n</tr>\n</tbody>\n</table>\n<ul>\n<li>Todas as propriedades foram refutadas com contra-exemplos concretos obtidos por BMC. Por isso, nenhuma delas precisa de uma prova por indu\u00e7\u00e3o.</li>\n<li>O facto de as c\u00e9lulas iniciais serem sorteadas \u00e9 essencial. O solver escolhe a configura\u00e7\u00e3o da fronteira, e qualquer configura\u00e7\u00e3o \u00e9 poss\u00edvel, com probabilidade 2^{-(2N+1)}.</li>\n<li>Para reproduzir os resultados do outro modo, basta alterar o par\u00e2metro MODO na sec\u00e7\u00e3o 1.</li>\n</ul>\n<span class=\"paragraph\">Para a realiza\u00e7\u00e3o deste trabalho, foi utilizada a ferramenta de Intelig\u00eancia Artificial Gemini como apoio na resolu\u00e7\u00e3o de d\u00favidas, no desenvolvimento do c\u00f3digo e formata\u00e7\u00e3o de texto.</span>\n<span class=\"paragraph\">Link: <a href=\"https://share.gemini.google/cxfcjnSXBLSh\" rel=\"noopener noreferrer\" target=\"_blank\">https://share.gemini.google/cxfcjnSXBLSh</a></span></span>"
+          }
+        }
+      ],
+      "console": []
+    }
+  ]
+}

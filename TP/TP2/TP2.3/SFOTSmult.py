@@ -1107,6 +1107,7 @@ def _(mo):
         2. Análise de código e a sua eventual correção
         3. Aconcelhamento do workflow a seguir.
 
+    ####O modelo de AI utilizado foi o `Claude`
     ---
     """)
     return
